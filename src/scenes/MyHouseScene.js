@@ -28,7 +28,10 @@ var MyHouseLayer = cc.Layer.extend({
     _isUIMoving:false,
     _hideBtn:null,
     _zbData:[],
+    _zbSps:[],
     _zbSelectType:0,
+    _zbSelectIdx:0,
+    _zbIsCanMove:false,
     _bottomTable:[],
 
     ctor:function() {
@@ -145,6 +148,13 @@ var MyHouseLayer = cc.Layer.extend({
         }
     },
 
+    containsTouchLocation:function (sp, touch){
+        var getPoint = touch.getLocation();
+        getPoint = this.bg.convertToNodeSpace(getPoint);
+        var myRect = sp.getBoundingBox();
+        return cc.rectContainsPoint(myRect, getPoint);
+    },
+
     onTouchBegan: function (touch, event) {
         cc.log("我的小屋:touch");
         if (!this._isZhuangBan) {
@@ -152,17 +162,71 @@ var MyHouseLayer = cc.Layer.extend({
               this.onLasuoBtnCallback();
             }
         }
+
+        var indexs = [];
+
+        for (var i = this._zbSps.length - 1; i >= 0; i--) {
+            if (this.containsTouchLocation(this._zbSps[i], touch)) {
+                cc.log("i:" + i);
+                indexs.push(i);
+
+            }
+        }
+
+        cc.log("indexs.length:" + indexs.length);
+        if (indexs.length == 1) {
+            this._zbSelectIdx = indexs[0];
+            cc.log("indexs.length:" + indexs.length);
+            this._zbIsCanMove = true;
+            this._zbSps[this._zbSelectIdx].setZOrder(100);
+        }else{
+            for (var i = indexs.length - 1; i >= 1; i--) {
+                if (this._zbSps[indexs[i]].getZOrder() > this._zbSps[indexs[i - 1]].getZOrder()) {
+                    this._zbSelectIdx = indexs[i];
+                }else{
+                    this._zbSelectIdx = indexs[i - 1];
+                }
+                this._zbIsCanMove = true;
+            }
+            this._zbSps[this._zbSelectIdx].setZOrder(100);
+        }
+
+        for (var i = this._zbSps.length - 1; i >= 0; i--) {
+            if (i != this._zbSelectIdx) {
+                this._zbSps[i].setZOrder(10);
+            }
+        }
+        
         
         return true;
+    },
+
+    onTouchMoved:function (touch, event){
+        var preTouchPoint = touch.getPreviousLocation();
+        var touchPoint = touch.getLocation();
+        var offset = cc.p(touchPoint.x - preTouchPoint.x, touchPoint.y - preTouchPoint.y);
+        if (this._zbSps[this._zbSelectIdx] && this._zbIsCanMove) {
+            var worldPos = this.bg.convertToWorldSpace(this._zbSps[this._zbSelectIdx].getPosition());
+            var pos = cc.p(worldPos.x + offset.x, worldPos.y + offset.y);
+            this._zbSps[this._zbSelectIdx].setPosition(this.bg.convertToNodeSpace(pos));
+        }
+        
+    },
+
+    onTouchEnded:function (touch, event){
+        this._zbIsCanMove = false;
     },
 
     createUINode: function (){
         this.bg = AutoFitNode.create(scaleMode.FitOut);
         this.addChild(this.bg);
+        this.bg.setContentSize(default_winSize.width, default_winSize.height);
+        this.bg.setAnchorPoint(0.5, 0.5);
         this.bg.setPosition(this.getContentSize().width / 2, this.getContentSize().height / 2);
         cc.log("width:" + this.getContentSize().width + "   height:" + this.getContentSize().height);
 
         var bgSp = cc.Sprite.create("res/scenes/mainScene/bg.png");
+        bgSp.setPosition(this.bg.getContentSize().width / 2 , this.bg.getContentSize().height / 2);
         this.bg.addChild(bgSp);
 
 
@@ -341,7 +405,38 @@ var MyHouseLayer = cc.Layer.extend({
             this._zbSelectType = cell.getIdx();
             this._bottomTable[this._zbSelectType].setVisible(true);
             this._bottomTable[this._zbSelectType].reloadData();
-        }else{
+        }else if (table.getTag() >= 1000){
+            var type = table.getTag() - 1000;
+            var tag = type * 1000 + cell.getIdx();
+            if (!this.bg.getChildByTag(tag)) {
+                if (type == 4) {
+                    var sprite = cc.Sprite.create("res/scenes/myHouseScene/" + this._zbData[type][cell.getIdx()]);
+                    this.bg.addChild(sprite);
+                    sprite.setAnchorPoint(0.5, 1);
+                    sprite.setPosition(cc.p(this.bg.getContentSize().width / 2, 721));
+                    sprite.setTag(tag);
+                }
+                else if (type == 5) {
+                    var sprite = cc.Sprite.create("res/scenes/myHouseScene/" + this._zbData[type][cell.getIdx()]);
+                    this.bg.addChild(sprite);
+                    sprite.setAnchorPoint(0.5, 0);
+                    sprite.setPosition(cc.p(this.bg.getContentSize().width / 2, 0));
+                    sprite.setTag(tag);
+                }else if (type == 9) {
+                    var sprite = cc.Sprite.create("res/scenes/myHouseScene/" + this._zbData[type][cell.getIdx()]);
+                    this.bg.addChild(sprite);
+                    sprite.setAnchorPoint(0.5, 1);
+                    sprite.setPosition(cc.p(this.bg.getContentSize().width / 2, this.bg.getContentSize().height));
+                    sprite.setTag(tag);
+                }else{
+                    var sprite = cc.Sprite.create("res/scenes/myHouseScene/" + this._zbData[type][cell.getIdx()]);
+                    sprite.setPosition(cc.p(this.bg.getContentSize().width / 2, this.bg.getContentSize().height / 2));
+                    this._zbSps.push(sprite);
+                    this.bg.addChild(sprite);
+                    sprite.setTag(tag);
+                }
+                
+            }
             
         }
     },
@@ -408,7 +503,9 @@ var MyHouseLayer = cc.Layer.extend({
             return 11;
         }else if(table.getTag() >= 1000){
             var type = table.getTag() - 1000;
-            return this._zbData[type].length;
+            if (this._zbData[type]) {
+                return this._zbData[type].length;
+            }
         }
         return 0;
     },
