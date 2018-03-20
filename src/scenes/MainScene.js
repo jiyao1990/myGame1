@@ -25,13 +25,25 @@ var MainLayer = cc.Layer.extend({
         // 1. super init first
         this._super();
 
+        // this._uiNode.bg = AutoFitNode.create(scaleMode.FitOut);
+        // this.addChild(this._uiNode.bg);
+        // this._uiNode.bg.setPosition(this.getContentSize().width / 2, this.getContentSize().height / 2);
+
+        // var bgSp = cc.Sprite.create("res/scenes/mainScene/bg.png");
+        // this._uiNode.bg.addChild(bgSp);
+
         this._uiNode.bg = AutoFitNode.create(scaleMode.FitOut);
         this.addChild(this._uiNode.bg);
+        this._uiNode.bg.setContentSize(default_winSize.width, default_winSize.height);
+        this._uiNode.bg.setAnchorPoint(0.5, 0.5);
         this._uiNode.bg.setPosition(this.getContentSize().width / 2, this.getContentSize().height / 2);
+        cc.log("width:" + this.getContentSize().width + "   height:" + this.getContentSize().height);
 
         var bgSp = cc.Sprite.create("res/scenes/mainScene/bg.png");
+        bgSp.setPosition(this._uiNode.bg.getContentSize().width / 2 , this._uiNode.bg.getContentSize().height / 2);
         this._uiNode.bg.addChild(bgSp);
 
+        g_zbRoom(this._uiNode.bg);
 
         // var live2dsp = cc.Sprite.createLive2D();
         var live2dsp = Live2DSprite.create();

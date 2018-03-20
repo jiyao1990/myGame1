@@ -26,3 +26,17 @@ var g_zbInfo = [
 var g_zbNowInfo = [
 	//{path:'', pos:[], zoder:0},
 ];
+
+var g_zbRoom = function(parent){
+	cc.log("装扮：" + g_zbNowInfo.length);
+	if (g_zbNowInfo.length > 0) {
+		for (var i = g_zbNowInfo.length - 1; i >= 0; i--) {
+			var sp = cc.Sprite.create(g_zbNowInfo[i].path);
+			parent.addChild(sp);
+			sp.setTag(g_zbNowInfo[i].tag);
+			sp.setPosition(g_zbNowInfo[i].pos);
+			sp.setZOrder(g_zbNowInfo[i].zoder);
+			sp.setAnchorPoint(g_zbNowInfo[i].anchor);
+		}
+	}
+}

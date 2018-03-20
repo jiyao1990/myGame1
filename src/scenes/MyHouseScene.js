@@ -29,9 +29,11 @@ var MyHouseLayer = cc.Layer.extend({
     _hideBtn:null,
     _zbData:[],
     _zbSps:[],
+    _zbNow:[],
     _zbSelectType:0,
     _zbSelectIdx:0,
     _zbIsCanMove:false,
+    _leftTable:null,
     _bottomTable:[],
 
     ctor:function() {
@@ -47,10 +49,10 @@ var MyHouseLayer = cc.Layer.extend({
         //////////////////////////////
         // 1. super init first
         this._super();
-        this.parseZBInfo();
         //初始ui
         this.createUINode();
         //装扮ui
+        this.parseZBInfo();
         this.createZbNode();
 
         if (g_sex == null) {
@@ -83,6 +85,8 @@ var MyHouseLayer = cc.Layer.extend({
                 }
             
             }
+            this.initZBPage();
+
         }else if (sender.getTag() == 2) {
             var newScene = new JackpotScene();
             g_director.replaceScene(newScene);
@@ -90,6 +94,24 @@ var MyHouseLayer = cc.Layer.extend({
             var newScene = new ShopScene();
             g_director.replaceScene(newScene);
         }
+    },
+
+    initZBPage:function(){
+        this._zbNow = g_zbNowInfo.concat();
+        for (var i = this._zbNow.length - 1; i >= 0; i--) {
+            var type = Math.floor(this._zbNow[i].tag / 1000);
+            if (type != 4 && type != 5 && type != 9) {
+                this._zbSps.push(this.bg.getChildByTag(this._zbNow[i].tag));
+            }
+            
+        }
+
+        this._leftTable.reloadData();
+        for (var i = 0; i < ZBName.length; i++) {
+            this._bottomTable[i].reloadData()
+            this._bottomTable[i].setVisible(false);
+        }
+        this._bottomTable[this._zbSelectType].setVisible(true);
     },
 
     onBackBtnCallback:function(sender){
@@ -166,8 +188,9 @@ var MyHouseLayer = cc.Layer.extend({
         var indexs = [];
 
         for (var i = this._zbSps.length - 1; i >= 0; i--) {
+            cc.log("i1:" + i + " this._zbSps.length:" + this._zbSps.length);
             if (this.containsTouchLocation(this._zbSps[i], touch)) {
-                cc.log("i:" + i);
+                cc.log("i2:" + i);
                 indexs.push(i);
 
             }
@@ -178,8 +201,10 @@ var MyHouseLayer = cc.Layer.extend({
             this._zbSelectIdx = indexs[0];
             cc.log("indexs.length:" + indexs.length);
             this._zbIsCanMove = true;
-            this._zbSps[this._zbSelectIdx].setZOrder(100);
-        }else{
+            if (this._zbSps[this._zbSelectIdx].getZOrder() < 10) {
+                this._zbSps[this._zbSelectIdx].setZOrder(this._zbSps[this._zbSelectIdx].getZOrder() * 10);
+            }
+        }else if (indexs.length > 1){
             for (var i = indexs.length - 1; i >= 1; i--) {
                 if (this._zbSps[indexs[i]].getZOrder() > this._zbSps[indexs[i - 1]].getZOrder()) {
                     this._zbSelectIdx = indexs[i];
@@ -188,13 +213,19 @@ var MyHouseLayer = cc.Layer.extend({
                 }
                 this._zbIsCanMove = true;
             }
-            this._zbSps[this._zbSelectIdx].setZOrder(100);
+            if (this._zbSps[this._zbSelectIdx].getZOrder() < 10) {
+                this._zbSps[this._zbSelectIdx].setZOrder(this._zbSps[this._zbSelectIdx].getZOrder() * 10);
+            }
         }
 
         for (var i = this._zbSps.length - 1; i >= 0; i--) {
             if (i != this._zbSelectIdx) {
-                this._zbSps[i].setZOrder(10);
+                if (this._zbSps[i].getZOrder() > 10) {
+                    this._zbSps[i].setZOrder(this._zbSps[i].getZOrder() / 10);
+                }
+                
             }
+            cc.log("i: " + i + " zoder:" + this._zbSps[i].getZOrder());
         }
         
         
@@ -215,6 +246,13 @@ var MyHouseLayer = cc.Layer.extend({
 
     onTouchEnded:function (touch, event){
         this._zbIsCanMove = false;
+        for (var i = this._zbNow.length - 1; i >= 0; i--) {
+            if (this._zbSps[this._zbSelectIdx] && this._zbNow[i].tag == this._zbSps[this._zbSelectIdx].getTag()) {
+                this._zbNow[i].pos = this._zbSps[this._zbSelectIdx].getPosition();
+                this._zbNow[i].zoder = this._zbSps[this._zbSelectIdx].getZOrder();
+                this._zbNow[i].anchor = this._zbSps[this._zbSelectIdx].getAnchorPoint();
+            }
+        }
     },
 
     createUINode: function (){
@@ -229,6 +267,7 @@ var MyHouseLayer = cc.Layer.extend({
         bgSp.setPosition(this.bg.getContentSize().width / 2 , this.bg.getContentSize().height / 2);
         this.bg.addChild(bgSp);
 
+        g_zbRoom(this.bg);
 
         this._uiNode.left = AutoFitNode.create(scaleMode.FitIn);
         this.addChild(this._uiNode.left);
@@ -309,20 +348,20 @@ var MyHouseLayer = cc.Layer.extend({
         this._zbNode.left.setAnchorPoint(0, 1);
         this._zbNode.left.setPosition(0, this.getContentSize().height);
 
-        var tableView = cc.TableView.create(this, cc.size(150, 500));
-        tableView.setTag(100);
-        tableView.setDirection(cc.SCROLLVIEW_DIRECTION_VERTICAL);
-        tableView.setPosition(15, 22.5);
-        tableView.setDelegate(this);
-        tableView.setVerticalFillOrder(cc.TABLEVIEW_FILL_TOPDOWN);
-        this._zbNode.left.addChild(tableView);
-        tableView.setScale(fitScaleIn);
-        tableView.reloadData();
+        this._leftTable = cc.TableView.create(this, cc.size(150, 500));
+        this._leftTable.setTag(100);
+        this._leftTable.setDirection(cc.SCROLLVIEW_DIRECTION_VERTICAL);
+        this._leftTable.setPosition(15, 22.5);
+        this._leftTable.setDelegate(this);
+        this._leftTable.setVerticalFillOrder(cc.TABLEVIEW_FILL_TOPDOWN);
+        this._zbNode.left.addChild(this._leftTable);
+        this._leftTable.setScale(fitScaleIn);
+        this._leftTable.reloadData();
 
 
         this._zbNode.bottom = AutoFitNode.create(scaleMode.FitIn);
         this.addChild(this._zbNode.bottom);
-        this._zbNode.bottom.setContentSize(840, 175);
+        this._zbNode.bottom.setContentSize(default_winSize.width, 175);
         this._zbNode.bottom.setAnchorPoint(0.5, 0);
         this._zbNode.bottom.setPosition(this.getContentSize().width / 2, 0);
 
@@ -330,7 +369,7 @@ var MyHouseLayer = cc.Layer.extend({
             this._bottomTable[i] = cc.TableView.create(this, cc.size(790, 145));
             this._bottomTable[i].setTag(1000 + i);
             this._bottomTable[i].setDirection(cc.SCROLLVIEW_DIRECTION_HORIZONTAL);
-            this._bottomTable[i].setPosition(25, 15);
+            this._bottomTable[i].setPosition((default_winSize.width - 790) / 2, 15);
             this._bottomTable[i].setDelegate(this);
             // this._bottomTable.setVerticalFillOrder(cc.TABLEVIEW_FILL_TOPDOWN);
             this._zbNode.bottom.addChild(this._bottomTable[i]);
@@ -340,24 +379,24 @@ var MyHouseLayer = cc.Layer.extend({
         this._bottomTable[this._zbSelectType].setVisible(true);
         
         
-
-        // this._zbNode.top = AutoFitNode.create(scaleMode.FitIn);
-        // this.addChild(this._zbNode.top);
-        // this._zbNode.top.setContentSize(default_winSize.width, default_winSize.height / 4);
-        // this._zbNode.top.setAnchorPoint(0, 1);
-        // this._zbNode.top.setPosition(0, this.getContentSize().height);
-        // var topMenu = cc.Menu.create();
-        // for (var i = 0; i < 2; i++) {
-        //     var spNormal = cc.Sprite.create("res/scenes/myHouseScene/left_2.png");
-        //     var spSelected = cc.Sprite.create("res/scenes/myHouseScene/left_2_.png");
-        //     var item = cc.MenuItemSprite.create(spNormal, spSelected,  this.onSaveOrBackBtnCallback, this);
-        //     item.setTag(i);
-        //     topMenu.addChild(item);
-        //     item.setAnchorPoint(0, 0.5);
-        //     item.setPosition(10 + i * item.getContentSize().width, this._zbNode.top.getContentSize().height / 2);
-        // }
-        // this._zbNode.top.addChild(topMenu);
-        // topMenu.setPosition(0,0);
+        var bottomMenu = cc.Menu.create();
+        for (var i = 0; i < 2; i++) {
+            var spNormal = cc.Sprite.create("res/scenes/mainScene/back.png");
+            var spSelected = cc.Sprite.create("res/scenes/mainScene/back_.png");
+            var item = cc.MenuItemSprite.create(spNormal, spSelected,  this.onSaveOrBackBtnCallback, this);
+            item.setTag(i);
+            bottomMenu.addChild(item);
+            if (i == 1) {
+                item.setAnchorPoint(0, 0);
+                item.setPosition(0, 0);
+            }else{
+                item.setAnchorPoint(1, 0);
+                item.setPosition(this._zbNode.bottom.getContentSize().width, 0);
+            }
+            
+        }
+        this._zbNode.bottom.addChild(bottomMenu);
+        bottomMenu.setPosition(0,0);
 
         for (var key in this._zbNode){
             if (this._zbNode[key]) {
@@ -371,10 +410,36 @@ var MyHouseLayer = cc.Layer.extend({
     },
 
     onSaveOrBackBtnCallback:function(sender){
+        cc.log("sender.getTag()" + sender.getTag());
         if (sender.getTag() == 0) {
             //保存
+            cc.log("保存");
+            for (var i = this._zbNow.length - 1; i >= 0; i--) {
+                this.bg.getChildByTag(this._zbNow[i].tag).removeFromParent();
+            }
+            g_zbNowInfo = this._zbNow.concat();
+            this._zbNow = [];
+            this._zbSps = [];
+            this._zbSelectType = 0;
+            this._zbSelectIdx = 0;
+            this._zbIsCanMove = false;
+
+            g_zbRoom(this.bg);
+
         }else if (sender.getTag() == 1) {
             //返回
+            cc.log("返回" + g_zbNowInfo.length);
+            for (var i = this._zbNow.length - 1; i >= 0; i--) {
+                this.bg.getChildByTag(this._zbNow[i].tag).removeFromParent();
+            }
+            this._zbNow = [];
+            this._zbSps = [];
+            this._zbSelectType = 0;
+            this._zbSelectIdx = 0;
+            this._zbIsCanMove = false;
+
+            g_zbRoom(this.bg);
+
         }
         this._isZhuangBan = false;
         for (var key in this._uiNode){
@@ -409,33 +474,46 @@ var MyHouseLayer = cc.Layer.extend({
             var type = table.getTag() - 1000;
             var tag = type * 1000 + cell.getIdx();
             if (!this.bg.getChildByTag(tag)) {
+                var sprite = cc.Sprite.create("res/scenes/myHouseScene/" + this._zbData[type][cell.getIdx()]);
                 if (type == 4) {
-                    var sprite = cc.Sprite.create("res/scenes/myHouseScene/" + this._zbData[type][cell.getIdx()]);
                     this.bg.addChild(sprite);
                     sprite.setAnchorPoint(0.5, 1);
                     sprite.setPosition(cc.p(this.bg.getContentSize().width / 2, 721));
                     sprite.setTag(tag);
+                    sprite.setZOrder(1);
                 }
                 else if (type == 5) {
-                    var sprite = cc.Sprite.create("res/scenes/myHouseScene/" + this._zbData[type][cell.getIdx()]);
                     this.bg.addChild(sprite);
                     sprite.setAnchorPoint(0.5, 0);
                     sprite.setPosition(cc.p(this.bg.getContentSize().width / 2, 0));
                     sprite.setTag(tag);
+                    sprite.setZOrder(2);
                 }else if (type == 9) {
-                    var sprite = cc.Sprite.create("res/scenes/myHouseScene/" + this._zbData[type][cell.getIdx()]);
                     this.bg.addChild(sprite);
                     sprite.setAnchorPoint(0.5, 1);
                     sprite.setPosition(cc.p(this.bg.getContentSize().width / 2, this.bg.getContentSize().height));
                     sprite.setTag(tag);
+                    sprite.setZOrder(3);
                 }else{
-                    var sprite = cc.Sprite.create("res/scenes/myHouseScene/" + this._zbData[type][cell.getIdx()]);
                     sprite.setPosition(cc.p(this.bg.getContentSize().width / 2, this.bg.getContentSize().height / 2));
                     this._zbSps.push(sprite);
                     this.bg.addChild(sprite);
                     sprite.setTag(tag);
+                    if (type == 0 || type == 2 || type == 3 || type == 7) {
+                        sprite.setZOrder(4);
+                    }else if(type == 6 || type == 8){
+                        sprite.setZOrder(5);
+                    }else if(type == 1 || type == 10){
+                        sprite.setZOrder(6);
+                    }
                 }
-                
+                var obj = {};
+                obj.path = "res/scenes/myHouseScene/" + this._zbData[type][cell.getIdx()];
+                obj.tag = tag;
+                obj.anchor = sprite.getAnchorPoint();
+                obj.zoder = sprite.getZOrder();
+                obj.pos = sprite.getPosition();
+                this._zbNow.push(obj);
             }
             
         }
@@ -511,6 +589,7 @@ var MyHouseLayer = cc.Layer.extend({
     },
 
     parseZBInfo:function (){
+        this._zbData = [];
         for (var i = 0; i < g_zbInfo.length; i++) {
             for (var j = 0; j < g_zbInfo[i].length; j++) {
                 if (this._zbData[g_zbInfo[i][j].type] == null)
