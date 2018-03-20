@@ -1,0 +1,8 @@
+{
+	"type": "Live2D Model Setting",
+	"name": "keleqiu",
+	"model": "keleqiu.moc",
+	"textures": [
+		"keleqiu.1024/texture_00.png"
+	]
+}
