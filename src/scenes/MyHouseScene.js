@@ -344,18 +344,31 @@ var MyHouseLayer = cc.Layer.extend({
     createZbNode: function (){
         this._zbNode.left = cc.Node.create();
         this.addChild(this._zbNode.left);
-        this._zbNode.left.setContentSize(180, 595);
+        this._zbNode.left.setContentSize(234 * fitScaleIn, 596 * fitScaleIn);
         this._zbNode.left.setAnchorPoint(0, 1);
         this._zbNode.left.setPosition(0, this.getContentSize().height);
 
-        this._leftTable = cc.TableView.create(this, cc.size(150, 500));
+        var left_bg_0 = cc.Sprite.create("res/scenes/myHouseScene/left_bg_0.png");
+        this._zbNode.left.addChild(left_bg_0);
+        left_bg_0.setAnchorPoint(0, 1);
+        left_bg_0.setPosition(0, this._zbNode.left.getContentSize().height);
+        left_bg_0.setScale(fitScaleIn);
+
+
+        var left_bg_1 = cc.Sprite.create("res/scenes/myHouseScene/left_bg_1.png");
+        left_bg_0.addChild(left_bg_1);
+        left_bg_1.setPosition(18, 40);
+        left_bg_1.setAnchorPoint(0, 0);
+        left_bg_1.setZOrder(-1);
+
+        this._leftTable = cc.TableView.create(this, cc.size(210, 506));
         this._leftTable.setTag(100);
         this._leftTable.setDirection(cc.SCROLLVIEW_DIRECTION_VERTICAL);
-        this._leftTable.setPosition(15, 22.5);
+        // this._leftTable.setPosition(16.5, 22.5);
+        this._leftTable.setPosition(-4.5 * fitScaleIn, 0 * fitScaleIn); 
         this._leftTable.setDelegate(this);
         this._leftTable.setVerticalFillOrder(cc.TABLEVIEW_FILL_TOPDOWN);
-        this._zbNode.left.addChild(this._leftTable);
-        this._leftTable.setScale(fitScaleIn);
+        left_bg_1.addChild(this._leftTable);
         this._leftTable.reloadData();
 
 
@@ -365,14 +378,20 @@ var MyHouseLayer = cc.Layer.extend({
         this._zbNode.bottom.setAnchorPoint(0.5, 0);
         this._zbNode.bottom.setPosition(this.getContentSize().width / 2, 0);
 
+        var bottom_bg = cc.Sprite.create("res/scenes/myHouseScene/bottom_bg.png");
+        this._zbNode.bottom.addChild(bottom_bg);
+        bottom_bg.setPosition(this._zbNode.bottom.getContentSize().width / 2, 0);
+        bottom_bg.setAnchorPoint(0.5, 0);
+        bottom_bg.setZOrder(-1);
+
         for (var i = 0; i < ZBName.length; i++) {
-            this._bottomTable[i] = cc.TableView.create(this, cc.size(790, 145));
+            this._bottomTable[i] = cc.TableView.create(this, cc.size(800, 140));
             this._bottomTable[i].setTag(1000 + i);
             this._bottomTable[i].setDirection(cc.SCROLLVIEW_DIRECTION_HORIZONTAL);
-            this._bottomTable[i].setPosition((default_winSize.width - 790) / 2, 15);
+            this._bottomTable[i].setPosition(28, 23);
             this._bottomTable[i].setDelegate(this);
             // this._bottomTable.setVerticalFillOrder(cc.TABLEVIEW_FILL_TOPDOWN);
-            this._zbNode.bottom.addChild(this._bottomTable[i]);
+            bottom_bg.addChild(this._bottomTable[i]);
             this._bottomTable[i].reloadData()
             this._bottomTable[i].setVisible(false);
         }
@@ -381,15 +400,21 @@ var MyHouseLayer = cc.Layer.extend({
         
         var bottomMenu = cc.Menu.create();
         for (var i = 0; i < 2; i++) {
-            var spNormal = cc.Sprite.create("res/scenes/mainScene/back.png");
-            var spSelected = cc.Sprite.create("res/scenes/mainScene/back_.png");
-            var item = cc.MenuItemSprite.create(spNormal, spSelected,  this.onSaveOrBackBtnCallback, this);
-            item.setTag(i);
-            bottomMenu.addChild(item);
+            
             if (i == 1) {
+                var spNormal = cc.Sprite.create("res/scenes/mainScene/back.png");
+                var spSelected = cc.Sprite.create("res/scenes/mainScene/back_.png");
+                var item = cc.MenuItemSprite.create(spNormal, spSelected,  this.onSaveOrBackBtnCallback, this);
+                item.setTag(i);
+                bottomMenu.addChild(item);
                 item.setAnchorPoint(0, 0);
                 item.setPosition(0, 0);
             }else{
+                var spNormal = cc.Sprite.create("res/scenes/myHouseScene/ok.png");
+                var spSelected = cc.Sprite.create("res/scenes/myHouseScene/ok_.png");
+                var item = cc.MenuItemSprite.create(spNormal, spSelected,  this.onSaveOrBackBtnCallback, this);
+                item.setTag(i);
+                bottomMenu.addChild(item);
                 item.setAnchorPoint(1, 0);
                 item.setPosition(this._zbNode.bottom.getContentSize().width, 0);
             }
@@ -466,8 +491,16 @@ var MyHouseLayer = cc.Layer.extend({
 
     tableCellTouched:function (table, cell) {
         if (table.getTag() == 100) {
+            cc.log("1 this._zbSelectType " + this._zbSelectType);
             this._bottomTable[this._zbSelectType].setVisible(false);
-            this._zbSelectType = cell.getIdx();
+            if (table.cellAtIndex(this._zbSelectType + 1)) {
+                table.cellAtIndex(this._zbSelectType + 1).getChildByTag(100).setVisible(true);
+                table.cellAtIndex(this._zbSelectType + 1).getChildByTag(101).setVisible(false);
+            }
+            this._zbSelectType = cell.getIdx() - 1;
+            cell.getChildByTag(100).setVisible(false);
+            cell.getChildByTag(101).setVisible(true);
+            cc.log("2 this._zbSelectType " + this._zbSelectType);
             this._bottomTable[this._zbSelectType].setVisible(true);
             this._bottomTable[this._zbSelectType].reloadData();
         }else if (table.getTag() >= 1000){
@@ -521,37 +554,45 @@ var MyHouseLayer = cc.Layer.extend({
 
     tableCellSizeForIndex:function (table, idx){
         if (table.getTag() == 100) {
-            return cc.size(85, 150);
+            return cc.size(210, 100);
         }else if(table.getTag() >= 1000){
-            return cc.size(190, 140);
+            return cc.size(200, 140);
         }
         return cc.size(0, 0);
     },
 
     tableCellAtIndex:function (table, idx) {
-        var cell = table.dequeueCell();
+        var cell = table.cellAtIndex(idx);
         
         if (table.getTag() == 100) {
-            var strValue = ZBName[idx];
-            var label;
             if (!cell) {
-                cell = new CustomTableViewCell();
-                var sprite = cc.Sprite.create("res/scenes/myHouseScene/left_1.png");
-                sprite.setAnchorPoint(0, 0);
-                sprite.setPosition(0, 0);
-                cell.addChild(sprite);
+                if (idx == 0) {
+                    cell = new CustomTableViewCell();
+                }else{
+                    idx = idx - 1;
+                    cell = new CustomTableViewCell();
+                    var sprite = cc.Sprite.create("res/scenes/myHouseScene/left_btn_" + idx + ".png");
+                    sprite.setAnchorPoint(0, 0);
+                    sprite.setPosition(0, 0);
+                    cell.addChild(sprite);
+                    sprite.setTag(100);
 
-                label = cc.LabelTTF.create(strValue, "Helvetica", 30.0);
-                label.setPosition(sprite.getContentSize().width / 2, sprite.getContentSize().height / 2);
-                label.setColor(cc.c3b(0,0,0));
-                label.setAnchorPoint(0.5, 0.5);
-                label.setTag(123);
-                cell.addChild(label);
-            } else {
-                label = cell.getChildByTag(123);
-                label.setString(strValue);
+                    var sprite2 = cc.Sprite.create("res/scenes/myHouseScene/left_btn_" + idx + "_.png");
+                    sprite2.setAnchorPoint(0, 0);
+                    sprite2.setPosition(0, 0);
+                    cell.addChild(sprite2);
+                    sprite2.setTag(101);
+
+                    if (idx == this._zbSelectType) {
+                        sprite.setVisible(false);
+                        sprite2.setVisible(true);
+                    }else{
+                        sprite.setVisible(true);
+                        sprite2.setVisible(false);
+                    }
+                }
+                
             }
-
         }else if(table.getTag() >= 1000){
             if (!cell) {
 
@@ -560,15 +601,12 @@ var MyHouseLayer = cc.Layer.extend({
                 var sprite = cc.Sprite.create("res/scenes/myHouseScene/" + this._zbData[type][idx]);
                 sprite.setAnchorPoint(0.5, 0.5);
                 sprite.setPosition(85, 70);
-                var hRatio = 140 / sprite.getContentSize().height;
-                var wRatio = 190 / sprite.getContentSize().width;
+                var hRatio = 125 / sprite.getContentSize().height;
+                var wRatio = 175 / sprite.getContentSize().width;
                 var scale = hRatio > wRatio ? wRatio : hRatio;
 
                 sprite.setScale(scale);
                 cell.addChild(sprite);
-                
-                
-                
             }
         }
 
@@ -578,7 +616,7 @@ var MyHouseLayer = cc.Layer.extend({
 
     numberOfCellsInTableView:function (table) {
         if (table.getTag() == 100) {
-            return 11;
+            return 12;
         }else if(table.getTag() >= 1000){
             var type = table.getTag() - 1000;
             if (this._zbData[type]) {
