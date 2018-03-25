@@ -160,6 +160,19 @@ var SignInLayer = cc.Layer.extend({
         rightMenu.setPosition(0, 0);
         this._uiNode.right.addChild(rightMenu);
 
+
+        var text_tips = cc.Sprite.create("res/scenes/signInScene/text_tips.png");
+        text_tips.setScale(fitScaleIn);
+        text_tips.setAnchorPoint(0.5, 0);
+        text_tips.setPosition(this.getContentSize().width / 2, 20);
+        this.addChild(text_tips);
+
+        var text_time = cc.Sprite.create("res/scenes/signInScene/text_time.png");
+        text_time.setScale(fitScaleIn);
+        text_time.setAnchorPoint(1, 1);
+        text_time.setPosition(this.getContentSize().width - 20, this.getContentSize().height - 20);
+        this.addChild(text_time);
+
     },
 });
 
