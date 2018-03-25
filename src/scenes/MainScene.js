@@ -46,7 +46,7 @@ var MainLayer = cc.Layer.extend({
         g_zbRoom(this._uiNode.bg);
 
         // var live2dsp = cc.Sprite.createLive2D();
-        var live2dsp = Live2DSprite.create();
+        var live2dsp = LAppView.create();
         this.addChild(live2dsp);
 
         this._uiNode.left = AutoFitNode.create(scaleMode.FitIn);
@@ -175,7 +175,8 @@ var MainLayer = cc.Layer.extend({
     },
 
     onLeftBtnCallback:function(sender){
-        g_preScene = MainScene;
+        // g_preScene = MainScene;
+        g_ScenesQ.push(MainScene);
         if (sender.getTag() == 0) {
             var newScene = new MyCenterScene();
             g_director.replaceScene(newScene);
@@ -193,7 +194,8 @@ var MainLayer = cc.Layer.extend({
             return;
         }
         cc.log("bottom btn tag:" + sender.getTag());
-        g_preScene = MainScene;
+        // g_preScene = MainScene;
+        g_ScenesQ.push(MainScene);
         if (sender.getTag() == 0) {
             var newScene = new MyHouseScene();
             g_director.replaceScene(newScene);
@@ -220,7 +222,7 @@ var MainLayer = cc.Layer.extend({
             this.onLasuoBtnCallback();
         }
         
-        return true;
+        return false;
     },
 
     onLasuoBtnCallback:function(){
@@ -288,13 +290,15 @@ var MainLayer = cc.Layer.extend({
 
     onEmailBtnCallback:function(){
         var newScene = new EmailScene();
-        g_preScene = MainScene;
+        // g_preScene = MainScene;
+        g_ScenesQ.push(MainScene);
         g_director.replaceScene(newScene);
     },
 
     onParentBtnCallback:function(){
         var newScene = new ParentsScene();
-        g_preScene = MainScene;
+        // g_preScene = MainScene;
+        g_ScenesQ.push(MainScene);
         g_director.replaceScene(newScene);
     },
 

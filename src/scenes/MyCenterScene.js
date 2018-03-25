@@ -15,7 +15,7 @@ var MyCenterLayer = cc.Layer.extend({
         var back_spNormal = cc.Sprite.create("res/scenes/mainScene/back.png");
         var back_spSelected = cc.Sprite.create("res/scenes/mainScene/back_.png");
         var back_item = cc.MenuItemSprite.create(back_spNormal, back_spSelected,  function() {
-            g_director.replaceScene(new g_preScene());
+            g_director.replaceScene(new (g_ScenesQ.pop())());
         }, this);
         var leftMenu = cc.Menu.create(back_item);
         leftMenu.setPosition(0, 0);

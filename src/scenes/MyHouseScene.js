@@ -57,14 +57,15 @@ var MyHouseLayer = cc.Layer.extend({
 
         if (g_sex == null) {
             var dialog = new Dialog();
-            dialog.init();
+            dialog.init(DialogType.sex);
             this.addChild(dialog);
         }
         return true;
     },
 
     onLeftBtnCallback:function(sender){
-        g_preScene = MyHouseScene;
+        // g_preScene = MyHouseScene;
+        g_ScenesQ.push(MyHouseScene);
         if (sender.getTag() == 0) {
             var newScene = new MyCenterScene();
             g_director.replaceScene(newScene);
@@ -310,7 +311,7 @@ var MyHouseLayer = cc.Layer.extend({
         topBg.addChild(dou);
         dou.setPosition(95, 65);
 
-        this._douNumLabel = cc.LabelTTF.create(g_douNum, "Arial", 32);
+        this._douNumLabel = cc.LabelTTF.create(g_douNum, "Arial", 40);
         topBg.addChild(this._douNumLabel);
         this._douNumLabel.setPosition(278, 65);
 
