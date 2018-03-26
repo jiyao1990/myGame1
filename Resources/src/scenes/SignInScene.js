@@ -8,10 +8,25 @@ var SignInLayer = cc.Layer.extend({
         right:null,
         center:null,
     },
+    _clickParticle:null,
 
     ctor:function() {
         this._super();
         cc.associateWithNative( this, cc.Layer );
+        this.setTouchEnabled(true);
+        this.setTouchMode(cc.TOUCH_ONE_BY_ONE);
+    },
+
+    onEnter:function () {
+
+        this._super();
+        cc.registerTargetedDelegate(0, true, this);
+    },
+
+    onExit:function () {
+        
+        this._super();
+        cc.unregisterTouchDelegate(this);
     },
 
     init:function () {
@@ -38,28 +53,41 @@ var SignInLayer = cc.Layer.extend({
         this._uiNode.bg.setContentSize(default_winSize.width, default_winSize.height);
         this._uiNode.bg.setAnchorPoint(0.5, 0.5);
         this._uiNode.bg.setPosition(this.getContentSize().width / 2, this.getContentSize().height / 2);
-        cc.log("width:" + this.getContentSize().width + "   height:" + this.getContentSize().height);
 
         var bgSp = cc.Sprite.create("res/scenes/signInScene/bg.png");
         bgSp.setPosition(this._uiNode.bg.getContentSize().width / 2 , this._uiNode.bg.getContentSize().height / 2);
         this._uiNode.bg.addChild(bgSp);
 
+
+        this._uiNode.center = AutoFitNode.create(scaleMode.FitIn);
+        this.addChild(this._uiNode.center);
+        this._uiNode.center.setContentSize(1039, 589);
+        this._uiNode.center.setAnchorPoint(0.5, 0.5);
+        this._uiNode.center.setPosition(this.getContentSize().width / 2, this.getContentSize().height / 2);
+
+        var box = cc.Sprite.create("res/scenes/signInScene/box.png");
+        box.setPosition(this._uiNode.center.getContentSize().width / 2, this._uiNode.center.getContentSize().height / 2);
+        this._uiNode.center.addChild(box);
+
         for (var i = 30; i >= 0; i--) {
 
-            
+            var item_bg = cc.Sprite.create("res/scenes/signInScene/item_bg.png");
+            box.addChild(item_bg);
+            item_bg.setAnchorPoint(0, 1);
+            item_bg.setPosition(38 + i % 8 * (item_bg.getContentSize().width - 7), box.getContentSize().height - 40 - Math.floor(i/8) * (item_bg.getContentSize().height));
 
             var item = cc.Sprite.create(g_itemData[randomNum(0,15)].path);
-            bgSp.addChild(item);
-            item.setPosition(145 + i % 8 * (121), bgSp.getContentSize().height - 220 - Math.floor(i/8) * (121));
-            var hRatio = (121 - 20) / item.getContentSize().height;
-            var wRatio = (121 - 20) / item.getContentSize().width;
+            item_bg.addChild(item);
+            item.setPosition(item_bg.getContentSize().width / 2, item_bg.getContentSize().height / 2);
+            var hRatio = (item_bg.getContentSize().height - 20) / item.getContentSize().height;
+            var wRatio = (item_bg.getContentSize().width - 20) / item.getContentSize().width;
             var scale = hRatio > wRatio ? wRatio : hRatio;
             item.setScale(scale);
 
             var label = cc.LabelAtlas.create((i + 1).toString(), "res/scenes/signInScene/num.png", 30, 29, '0');
-            bgSp.addChild(label);
+            item_bg.addChild(label);
             label.setAnchorPoint(0, 1);
-            label.setPosition(100 + i % 8 * (121), bgSp.getContentSize().height - 175 - Math.floor(i/8) * (121));
+            label.setPosition(10, item_bg.getContentSize().height - 10);
 
         }
 
@@ -109,7 +137,7 @@ var SignInLayer = cc.Layer.extend({
         this._uiNode.top.setAnchorPoint(0.5, 1);
         this._uiNode.top.setPosition(this.getContentSize().width / 2, this.getContentSize().height);
 
-        var topBg = cc.Sprite.create("res/scenes/mainScene/top.png");
+        var topBg = cc.Sprite.create("res/scenes/signInScene/title_bg.png");
         this._uiNode.top.addChild(topBg);
         topBg.setAnchorPoint(0.5, 1);
         topBg.setPosition(this._uiNode.top.getContentSize().width / 2, this._uiNode.top.getContentSize().height);
@@ -128,14 +156,14 @@ var SignInLayer = cc.Layer.extend({
 
         var btn_buqianNormal = cc.Sprite.create("res/scenes/signInScene/btn_buqian.png");
 
-        var ttf_douNum0 = cc.LabelTTF.create("999", "Arial", 40);
+        var ttf_douNum0 = cc.LabelTTF.create("999", "Arial", 37);
         ttf_douNum0.setAnchorPoint(0.5, 0);
         ttf_douNum0.setColor(cc.c3b(0, 0, 0));
         btn_buqianNormal.addChild(ttf_douNum0);
         ttf_douNum0.setPosition(235, 35);
 
         var btn_buqianSelected = cc.Sprite.create("res/scenes/signInScene/btn_buqian_.png");
-        var ttf_douNum1 = cc.LabelTTF.create("999", "Arial", 40);
+        var ttf_douNum1 = cc.LabelTTF.create("999", "Arial", 37);
         ttf_douNum1.setAnchorPoint(0.5, 0);
         ttf_douNum1.setColor(cc.c3b(0, 0, 0));
         btn_buqianSelected.addChild(ttf_douNum1);
@@ -164,15 +192,36 @@ var SignInLayer = cc.Layer.extend({
         var text_tips = cc.Sprite.create("res/scenes/signInScene/text_tips.png");
         text_tips.setScale(fitScaleIn);
         text_tips.setAnchorPoint(0.5, 0);
-        text_tips.setPosition(this.getContentSize().width / 2, 20);
+        text_tips.setPosition(this.getContentSize().width / 2, 20 * fitScaleIn);
         this.addChild(text_tips);
 
         var text_time = cc.Sprite.create("res/scenes/signInScene/text_time.png");
         text_time.setScale(fitScaleIn);
         text_time.setAnchorPoint(1, 1);
-        text_time.setPosition(this.getContentSize().width - 20, this.getContentSize().height - 20);
+        text_time.setPosition(this.getContentSize().width - 20 * fitScaleIn, this.getContentSize().height - 20 * fitScaleIn);
         this.addChild(text_time);
 
+        this._clickParticle = cc.ParticleSystem.create("res/particle/click.plist");
+        this.addChild(this._clickParticle);
+        this._clickParticle.stopSystem();
+
+    },
+
+    onTouchBegan: function (touch, event) {
+        cc.log("签到:touch");
+        var touchPoint = touch.getLocation();
+        this._clickParticle.resetSystem();
+        this._clickParticle.setPosition(touchPoint);
+        return true;
+    },
+
+    onTouchMoved:function (touch, event){
+        var touchPoint = touch.getLocation();
+        this._clickParticle.setPosition(touchPoint);
+    },
+
+    onTouchEnded:function (touch, event){
+        this._clickParticle.stopSystem();
     },
 });
 

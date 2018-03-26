@@ -59,9 +59,9 @@ void LAppView::onEnter()
 								 );
 
 
-	CCTouchDispatcher* dispatcher=CCDirector::sharedDirector()->getTouchDispatcher();
-
-	dispatcher->addStandardDelegate(this, 0);
+//    CCTouchDispatcher* dispatcher=CCDirector::sharedDirector()->getTouchDispatcher();
+//
+//    dispatcher->addStandardDelegate(this, 0);
 }
 
 
@@ -87,104 +87,38 @@ void LAppView::draw()
 }
 
 
-void LAppView::ccTouchesBegan(cocos2d::CCSet *touches, cocos2d::CCEvent *event) {
-    
-	if(touches==NULL)return;
-	int touchNum = 0 ;
-	CCTouch* touch_ary[CC_MAX_TOUCHES]  ;
+void LAppView::mTouchBegan(cocos2d::CCPoint pos) {
 
-	//for (CCSetIterator it = touches->begin(); it != touches->end(); ++it)
- //   {
-	//	touchNum++;
- //       CCTouch *touch  = (CCTouch *)(*it);
- //       int      id     = touch->getID(); // 0 to (CC_MAX_TOUCHES - 1)
- //       touch_ary[id]=touch;
- //   }
-
-	if( touches->count() == 1 )
-	{
-		CCPoint pt =  ((CCTouch*)touches->anyObject())->getLocationInView();
-        if(LAppDefine::DEBUG_TOUCH_LOG)CCLog( "touchesBegan x:%.0f y:%.0f",pt.x,pt.y);
-        touchMgr->touchesBegan(pt.x,pt.y);
-	}
-//	else if( touches->count() >= 2 )
-//	{
-//		CCPoint pt1 = touch_ary[0]->getLocationInView();
-//		CCPoint pt2 = touch_ary[1]->getLocationInView();
-//		if(LAppDefine::DEBUG_TOUCH_LOG)CCLog( "touchesBegan x1:%.0f y1:%.0f x2:%.0f y2:%.0f",pt1.x,pt1.y,pt2.x,pt2.y);
-//        touchMgr->touchesBegan(pt1.x,pt1.y,pt2.x,pt2.y);
-//	}
-
+    CCPoint pt =  pos;
+    if(LAppDefine::DEBUG_TOUCH_LOG)CCLog( "touchesBegan x:%.0f y:%.0f",pt.x,pt.y);
+    touchMgr->touchesBegan(pt.x,pt.y);
 }
 
-void LAppView::ccTouchesMoved(cocos2d::CCSet *touches, cocos2d::CCEvent *event) {
+void LAppView::mTouchMoved(cocos2d::CCPoint pos) {
     
-	if(touches==NULL)return;
-	int touchNum = 0 ;
-	//CCTouch * touch_ary[CC_MAX_TOUCHES] ;
- //
-	//for (CCSetIterator it = touches->begin(); it != touches->end(); ++it)
- //   {
-	//	touchNum++;
- //       CCTouch *touch  = (CCTouch *)(*it);
- //       int      id     = touch->getID(); // 0 to (CC_MAX_TOUCHES - 1)
- //       touch_ary[id]=touch;
-	//}
-
 	float screenX=this->transformScreenX(touchMgr->getX());
 	float screenY=this->transformScreenY(touchMgr->getY());
 	float viewX=this->transformViewX(touchMgr->getX());
 	float viewY=this->transformViewY(touchMgr->getY());
 
-	if( touches->count() == 1 )
-	{
-		CCPoint pt =  ((CCTouch*)touches->anyObject())->getLocationInView();
 
-		if(LAppDefine::DEBUG_TOUCH_LOG)CCLog( "touchesMoved device{x:%.0f y:%.0f} screen{x:%.2f y:%.2f} view{x:%.2f y:%.2f}",pt.x,pt.y,screenX,screenY,viewX,viewY);
-        touchMgr->touchesMoved(pt.x,pt.y);
-	}
-//	else if( touches->count() >= 2 )
-//	{
-//		
-//        CCPoint touchPoints[CC_MAX_TOUCHES];
-//
-//        for (int i=0; i<touchNum; i++)
-//		{
-//            touchPoints[i]=touch_ary[i]->getLocationInView();
-//        }
-//
-//        touchMgr->touchesMoved(touchPoints , touchNum);
-//
-//        
-//        float dx= touchMgr->getDeltaX() * deviceToScreen->getScaleX();
-//        float dy= touchMgr->getDeltaY() * deviceToScreen->getScaleY() ;
-//        float cx= deviceToScreen->transformX( touchMgr->getCenterX() ) * touchMgr->getScale();
-//        float cy= deviceToScreen->transformY( touchMgr->getCenterY() ) * touchMgr->getScale();
-//        float scale=touchMgr->getScale();
-//
-//        if(LAppDefine::DEBUG_TOUCH_LOG)CCLog( "touchesMoved  dx:%.2f dy:%.2f cx:%.2f cy:%.2f scale:%.2f",dx,dy,cx,cy,scale);
-//
-//		this->updateViewMatrix(dx ,dy ,cx ,cy ,scale);
-//
-//	}
+    CCPoint pt =  pos;
 
+    if(LAppDefine::DEBUG_TOUCH_LOG)CCLog( "touchesMoved device{x:%.0f y:%.0f} screen{x:%.2f y:%.2f} view{x:%.2f y:%.2f}",pt.x,pt.y,screenX,screenY,viewX,viewY);
+    touchMgr->touchesMoved(pt.x,pt.y);
 	LAppLive2DManager* live2DMgr=LAppLive2DManager::getInstance();
 	live2DMgr->onDrag(viewX, viewY);
 }
 
-void LAppView::ccTouchesEnded(cocos2d::CCSet *touches, cocos2d::CCEvent *event) {
+void LAppView::mTouchEnded(cocos2d::CCPoint pos) {
     
     LAppLive2DManager* live2DMgr=LAppLive2DManager::getInstance();
 	live2DMgr->onDrag(0, 0);
 
-    if( touches->count() == 1 )
-    {
-        
-        float x = deviceToScreen->transformX( touchMgr->getX() );
-        float y = deviceToScreen->transformY( touchMgr->getY() );
-        if (LAppDefine::DEBUG_LOG) CCLog( "touchesEnded x:%.2f y:%.2f",x,y);
-		live2DMgr->onTap(x,y);
-    }
+    float x = deviceToScreen->transformX( touchMgr->getX() );
+    float y = deviceToScreen->transformY( touchMgr->getY() );
+    if (LAppDefine::DEBUG_LOG) CCLog( "touchesEnded x:%.2f y:%.2f",x,y);
+    live2DMgr->onTap(x,y);
 }
 
 

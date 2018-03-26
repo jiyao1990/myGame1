@@ -35,6 +35,7 @@ var MyHouseLayer = cc.Layer.extend({
     _zbIsCanMove:false,
     _leftTable:null,
     _bottomTable:[],
+    _clickParticle:null,
 
     ctor:function() {
         this._super();
@@ -42,6 +43,19 @@ var MyHouseLayer = cc.Layer.extend({
         this.setTouchEnabled(true);
         this.setTouchMode(cc.TOUCH_ONE_BY_ONE);
         // this.setSwallowTouches(true);
+    },
+
+    onEnter:function () {
+        
+        this._super();
+        cc.registerTargetedDelegate(0, true, this);
+    },
+
+    onExit:function () {
+        cc.log("小屋 exit")
+        
+        this._super();
+        cc.unregisterTouchDelegate(this);
     },
 
     init:function () {
@@ -60,6 +74,10 @@ var MyHouseLayer = cc.Layer.extend({
             dialog.init(DialogType.sex);
             this.addChild(dialog);
         }
+
+        this._clickParticle = cc.ParticleSystem.create("res/particle/click.plist");
+        this.addChild(this._clickParticle);
+        this._clickParticle.stopSystem();
         return true;
     },
 
@@ -180,6 +198,9 @@ var MyHouseLayer = cc.Layer.extend({
 
     onTouchBegan: function (touch, event) {
         cc.log("我的小屋:touch");
+        var touchPoint = touch.getLocation();
+        this._clickParticle.resetSystem();
+        this._clickParticle.setPosition(touchPoint);
         if (!this._isZhuangBan) {
             if (!this._isShowUI) {
               this.onLasuoBtnCallback();
@@ -236,6 +257,7 @@ var MyHouseLayer = cc.Layer.extend({
     onTouchMoved:function (touch, event){
         var preTouchPoint = touch.getPreviousLocation();
         var touchPoint = touch.getLocation();
+        this._clickParticle.setPosition(touchPoint);
         var offset = cc.p(touchPoint.x - preTouchPoint.x, touchPoint.y - preTouchPoint.y);
         if (this._zbSps[this._zbSelectIdx] && this._zbIsCanMove) {
             var worldPos = this.bg.convertToWorldSpace(this._zbSps[this._zbSelectIdx].getPosition());
@@ -247,6 +269,7 @@ var MyHouseLayer = cc.Layer.extend({
 
     onTouchEnded:function (touch, event){
         this._zbIsCanMove = false;
+        this._clickParticle.stopSystem();
         for (var i = this._zbNow.length - 1; i >= 0; i--) {
             if (this._zbSps[this._zbSelectIdx] && this._zbNow[i].tag == this._zbSps[this._zbSelectIdx].getTag()) {
                 this._zbNow[i].pos = this._zbSps[this._zbSelectIdx].getPosition();

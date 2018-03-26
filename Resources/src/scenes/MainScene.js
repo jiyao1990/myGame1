@@ -11,12 +11,26 @@ var MainLayer = cc.Layer.extend({
     _isShowUI:true,
     _isUIMoving:false,
     _hideBtn:null,
+    _clickParticle:null,
+    _live2dSp:null,
 
     ctor:function() {
         this._super();
         cc.associateWithNative( this, cc.Layer );
         this.setTouchEnabled(true);
         this.setTouchMode(cc.TOUCH_ONE_BY_ONE);
+    },
+
+    onEnter:function () {
+        
+        this._super();
+        cc.registerTargetedDelegate(0, true, this);
+    },
+
+    onExit:function () {
+        
+        this._super();
+        cc.unregisterTouchDelegate(this);
     },
 
     init:function () {
@@ -46,8 +60,8 @@ var MainLayer = cc.Layer.extend({
         g_zbRoom(this._uiNode.bg);
 
         // var live2dsp = cc.Sprite.createLive2D();
-        var live2dsp = LAppView.create();
-        this.addChild(live2dsp);
+        this._live2dSp = LAppView.create();
+        this.addChild(this._live2dSp);
 
         this._uiNode.left = AutoFitNode.create(scaleMode.FitIn);
         this.addChild(this._uiNode.left);
@@ -114,6 +128,19 @@ var MainLayer = cc.Layer.extend({
             var length = this._uiNode.bottom.getContentSize().width - back_item.getContentSize().width;
 
             item.setPosition(back_item.getContentSize().width + length / 8 + (length / 4) * i, 0);
+
+            if (i == 2) {
+                var bottom_2_0 = cc.Sprite.create("res/scenes/mainScene/bottom_2_0.png");
+                item.addChild(bottom_2_0);
+                bottom_2_0.setAnchorPoint(0,0);
+                bottom_2_0.setPosition(45, 75);
+
+                var bottom_2_1 = cc.Sprite.create("res/scenes/mainScene/bottom_2_1.png");
+                item.addChild(bottom_2_1);
+                bottom_2_1.setAnchorPoint(0,0);
+                bottom_2_1.setPosition(120, 75);
+                bottom_2_1.runAction(cc.RepeatForever.create(cc.Sequence.create(cc.MoveBy.create(0.3, cc.p(0, 10)), cc.MoveBy.create(0.3, cc.p(-10, 0)), cc.MoveBy.create(0.3, cc.p(0, -10)), cc.MoveBy.create(0.3, cc.p(10, 0)) )));
+            }
         }
         this._uiNode.bottom.addChild(bottomMenu);
         bottomMenu.setPosition(0,0);
@@ -170,6 +197,9 @@ var MainLayer = cc.Layer.extend({
         this._uiNode.right.addChild(rightMenu);
         rightMenu.setPosition(0,0);
 
+        this._clickParticle = cc.ParticleSystem.create("res/particle/click.plist");
+        this.addChild(this._clickParticle);
+        this._clickParticle.stopSystem();
 
         return true;
     },
@@ -217,12 +247,31 @@ var MainLayer = cc.Layer.extend({
 
     onTouchBegan: function (touch, event) {
         cc.log("主页:touch");
-        cc.log("123456778");
+        var touchPoint = touch.getLocation();
+        this._clickParticle.resetSystem();
+        this._clickParticle.setPosition(touchPoint);
+
+        this._live2dSp.touchBegan(touch.getLocationInView());
+
         if (!this._isShowUI) {
             this.onLasuoBtnCallback();
         }
-        
-        return false;
+        return true;
+    },
+
+    onTouchMoved:function (touch, event){
+        cc.log("主页:onTouchMoved");
+        var touchPoint = touch.getLocation();
+        this._clickParticle.setPosition(touchPoint);
+
+        this._live2dSp.touchMoved(touch.getLocationInView());
+    },
+
+    onTouchEnded:function (touch, event){
+        cc.log("主页:onTouchEnded");
+        this._clickParticle.stopSystem();
+
+        this._live2dSp.touchEnded(touch.getLocationInView());
     },
 
     onLasuoBtnCallback:function(){

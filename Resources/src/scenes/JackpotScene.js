@@ -10,11 +10,25 @@ var JackpotLayer = cc.Layer.extend({
 
     _gift_close:null,
     _gift_open:null,
-
+    _clickParticle:null,
 
     ctor:function() {
         this._super();
         cc.associateWithNative( this, cc.Layer );
+        this.setTouchEnabled(true);
+        this.setTouchMode(cc.TOUCH_ONE_BY_ONE);
+    },
+
+    onEnter:function () {
+        
+        this._super();
+        cc.registerTargetedDelegate(0, true, this);
+    },
+
+    onExit:function () {
+        
+        this._super();
+        cc.unregisterTouchDelegate(this);
     },
 
     init:function () {
@@ -220,6 +234,27 @@ var JackpotLayer = cc.Layer.extend({
         this._douNumLabel = cc.LabelTTF.create(g_douNum, "Arial", 40);
         topBg.addChild(this._douNumLabel);
         this._douNumLabel.setPosition(278, 65);
+
+        this._clickParticle = cc.ParticleSystem.create("res/particle/click.plist");
+        this.addChild(this._clickParticle);
+        this._clickParticle.stopSystem();
+    },
+
+    onTouchBegan: function (touch, event) {
+        cc.log("抽奖:touch");
+        var touchPoint = touch.getLocation();
+        this._clickParticle.resetSystem();
+        this._clickParticle.setPosition(touchPoint);
+        return true;
+    },
+
+    onTouchMoved:function (touch, event){
+        var touchPoint = touch.getLocation();
+        this._clickParticle.setPosition(touchPoint);
+    },
+
+    onTouchEnded:function (touch, event){
+        this._clickParticle.stopSystem();
     },
 });
 

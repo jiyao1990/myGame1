@@ -28,9 +28,9 @@ public:
 	virtual void onExit();
 	virtual void draw();
 	
-	void ccTouchesBegan(cocos2d::CCSet *touches, cocos2d::CCEvent *event);
-    void ccTouchesMoved(cocos2d::CCSet *touches, cocos2d::CCEvent *event);
-    void ccTouchesEnded(cocos2d::CCSet *touches, cocos2d::CCEvent *event);
+    void mTouchBegan(cocos2d::CCPoint pos);
+    void mTouchMoved(cocos2d::CCPoint pos);
+    void mTouchEnded(cocos2d::CCPoint pos);
 	
 	void updateViewMatrix(float dx ,float dy ,float cx ,float cy ,float scale);
 	float transformViewX(float deviceX);
