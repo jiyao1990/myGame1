@@ -270,6 +270,14 @@ var MyHouseLayer = cc.Layer.extend({
     onTouchEnded:function (touch, event){
         this._zbIsCanMove = false;
         this._clickParticle.stopSystem();
+
+        for (var i = this._zbSps.length - 1; i >= 0; i--) {
+            if (this._zbSps[i].getZOrder() > 10) {
+                this._zbSps[i].setZOrder(this._zbSps[i].getZOrder() / 10);
+            }
+            cc.log("i: " + i + " zoder:" + this._zbSps[i].getZOrder());
+        }
+
         for (var i = this._zbNow.length - 1; i >= 0; i--) {
             if (this._zbSps[this._zbSelectIdx] && this._zbNow[i].tag == this._zbSps[this._zbSelectIdx].getTag()) {
                 this._zbNow[i].pos = this._zbSps[this._zbSelectIdx].getPosition();
