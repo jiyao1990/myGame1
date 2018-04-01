@@ -37,8 +37,8 @@ var SignInLayer = cc.Layer.extend({
         // this.addChild(title);
         // title.setPosition(this.getContentSize().width / 2 , this.getContentSize().height / 2);
 
-        // var back_spNormal = cc.Sprite.create("res/scenes/mainScene/back.png");
-        // var back_spSelected = cc.Sprite.create("res/scenes/mainScene/back_.png");
+        // var back_spNormal = cc.Sprite.create(g_res.img.gen_back);
+        // var back_spSelected = cc.Sprite.create(g_res.img.gen_back_);
         // var back_item = cc.MenuItemSprite.create(back_spNormal, back_spSelected,  function() {
         //     g_director.replaceScene(new (g_ScenesQ.pop())());
         // }, this);
@@ -54,7 +54,7 @@ var SignInLayer = cc.Layer.extend({
         this._uiNode.bg.setAnchorPoint(0.5, 0.5);
         this._uiNode.bg.setPosition(this.getContentSize().width / 2, this.getContentSize().height / 2);
 
-        var bgSp = cc.Sprite.create("res/scenes/signInScene/bg.png");
+        var bgSp = cc.Sprite.create(g_res.img.sce_sig_bg);
         bgSp.setPosition(this._uiNode.bg.getContentSize().width / 2 , this._uiNode.bg.getContentSize().height / 2);
         this._uiNode.bg.addChild(bgSp);
 
@@ -65,13 +65,13 @@ var SignInLayer = cc.Layer.extend({
         this._uiNode.center.setAnchorPoint(0.5, 0.5);
         this._uiNode.center.setPosition(this.getContentSize().width / 2, this.getContentSize().height / 2);
 
-        var box = cc.Sprite.create("res/scenes/signInScene/box.png");
+        var box = cc.Sprite.create(g_res.img.sce_sig_box);
         box.setPosition(this._uiNode.center.getContentSize().width / 2, this._uiNode.center.getContentSize().height / 2);
         this._uiNode.center.addChild(box);
 
         for (var i = 30; i >= 0; i--) {
 
-            var item_bg = cc.Sprite.create("res/scenes/signInScene/item_bg.png");
+            var item_bg = cc.Sprite.create(g_res.img.sce_sig_item_bg);
             box.addChild(item_bg);
             item_bg.setAnchorPoint(0, 1);
             item_bg.setPosition(38 + i % 8 * (item_bg.getContentSize().width - 7), box.getContentSize().height - 40 - Math.floor(i/8) * (item_bg.getContentSize().height));
@@ -84,7 +84,7 @@ var SignInLayer = cc.Layer.extend({
             var scale = hRatio > wRatio ? wRatio : hRatio;
             item.setScale(scale);
 
-            var label = cc.LabelAtlas.create((i + 1).toString(), "res/scenes/signInScene/num.png", 30, 29, '0');
+            var label = cc.LabelAtlas.create((i + 1).toString(), g_res.img.sce_sig_num, 30, 29, '0');
             item_bg.addChild(label);
             label.setAnchorPoint(0, 1);
             label.setPosition(10, item_bg.getContentSize().height - 10);
@@ -98,8 +98,8 @@ var SignInLayer = cc.Layer.extend({
         this._uiNode.left.setAnchorPoint(0, 1);
         this._uiNode.left.setPosition(0, this.getContentSize().height);
 
-        var buy_spNormal = cc.Sprite.create("res/scenes/signInScene/btn_buy.png");
-        var buy_spSelected = cc.Sprite.create("res/scenes/signInScene/btn_buy_.png");
+        var buy_spNormal = cc.Sprite.create(g_res.img.sce_sig_btn_buy);
+        var buy_spSelected = cc.Sprite.create(g_res.img.sce_sig_btn_buy_);
         var buy_item = cc.MenuItemSprite.create(buy_spNormal, buy_spSelected,  function() {
 
         }, this);
@@ -117,8 +117,8 @@ var SignInLayer = cc.Layer.extend({
         this._uiNode.bottom.setAnchorPoint(0, 0);
         this._uiNode.bottom.setPosition(0, 0);
 
-        var back_spNormal = cc.Sprite.create("res/scenes/mainScene/back.png");
-        var back_spSelected = cc.Sprite.create("res/scenes/mainScene/back_.png");
+        var back_spNormal = cc.Sprite.create(g_res.img.gen_back);
+        var back_spSelected = cc.Sprite.create(g_res.img.gen_back_);
         var back_item = cc.MenuItemSprite.create(back_spNormal, back_spSelected,  function() {
             g_director.replaceScene(new (g_ScenesQ.pop())());
         }, this);
@@ -133,18 +133,18 @@ var SignInLayer = cc.Layer.extend({
 
         this._uiNode.top = AutoFitNode.create(scaleMode.FitIn);
         this.addChild(this._uiNode.top);
-        this._uiNode.top.setContentSize(default_winSize.width, 160);
+        this._uiNode.top.setContentSize(default_winSize.width, 107);
         this._uiNode.top.setAnchorPoint(0.5, 1);
         this._uiNode.top.setPosition(this.getContentSize().width / 2, this.getContentSize().height);
 
-        var topBg = cc.Sprite.create("res/scenes/signInScene/title_bg.png");
+        var topBg = cc.Sprite.create(g_res.img.gen_title_bg);
         this._uiNode.top.addChild(topBg);
         topBg.setAnchorPoint(0.5, 1);
         topBg.setPosition(this._uiNode.top.getContentSize().width / 2, this._uiNode.top.getContentSize().height);
 
-        var title = cc.Sprite.create("res/scenes/signInScene/title.png");
+        var title = cc.Sprite.create(g_res.img.sce_sig_title);
         topBg.addChild(title);
-        title.setPosition(topBg.getContentSize().width / 2, topBg.getContentSize().height / 2);
+        title.setPosition(topBg.getContentSize().width / 2, topBg.getContentSize().height / 2 + 5);
 
 
         this._uiNode.right = AutoFitNode.create(scaleMode.FitIn);
@@ -154,7 +154,7 @@ var SignInLayer = cc.Layer.extend({
         this._uiNode.right.setPosition(this.getContentSize().width, 0);
 
 
-        var btn_buqianNormal = cc.Sprite.create("res/scenes/signInScene/btn_buqian.png");
+        var btn_buqianNormal = cc.Sprite.create(g_res.img.sce_sig_btn_buqian);
 
         var ttf_douNum0 = cc.LabelTTF.create("999", "Arial", 37);
         ttf_douNum0.setAnchorPoint(0.5, 0);
@@ -162,7 +162,7 @@ var SignInLayer = cc.Layer.extend({
         btn_buqianNormal.addChild(ttf_douNum0);
         ttf_douNum0.setPosition(235, 35);
 
-        var btn_buqianSelected = cc.Sprite.create("res/scenes/signInScene/btn_buqian_.png");
+        var btn_buqianSelected = cc.Sprite.create(g_res.img.sce_sig_btn_buqian_);
         var ttf_douNum1 = cc.LabelTTF.create("999", "Arial", 37);
         ttf_douNum1.setAnchorPoint(0.5, 0);
         ttf_douNum1.setColor(cc.c3b(0, 0, 0));
@@ -189,19 +189,19 @@ var SignInLayer = cc.Layer.extend({
         this._uiNode.right.addChild(rightMenu);
 
 
-        var text_tips = cc.Sprite.create("res/scenes/signInScene/text_tips.png");
+        var text_tips = cc.Sprite.create(g_res.img.sce_sig_text_tips);
         text_tips.setScale(fitScaleIn);
         text_tips.setAnchorPoint(0.5, 0);
         text_tips.setPosition(this.getContentSize().width / 2, 20 * fitScaleIn);
         this.addChild(text_tips);
 
-        var text_time = cc.Sprite.create("res/scenes/signInScene/text_time.png");
+        var text_time = cc.Sprite.create(g_res.img.sce_sig_text_time);
         text_time.setScale(fitScaleIn);
         text_time.setAnchorPoint(1, 1);
         text_time.setPosition(this.getContentSize().width - 20 * fitScaleIn, this.getContentSize().height - 20 * fitScaleIn);
         this.addChild(text_time);
 
-        this._clickParticle = cc.ParticleSystem.create("res/particle/click.plist");
+        this._clickParticle = cc.ParticleSystem.create(g_res.plist.click);
         this.addChild(this._clickParticle);
         this._clickParticle.stopSystem();
 

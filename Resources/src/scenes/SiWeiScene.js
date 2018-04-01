@@ -29,8 +29,8 @@ var SiWeiLayer = cc.Layer.extend({
         this.addChild(title);
         title.setPosition(this.getContentSize().width / 2 , this.getContentSize().height / 2);
 
-        var back_spNormal = cc.Sprite.create("res/scenes/mainScene/back.png");
-        var back_spSelected = cc.Sprite.create("res/scenes/mainScene/back_.png");
+        var back_spNormal = cc.Sprite.create(g_res.img.gen_back);
+        var back_spSelected = cc.Sprite.create(g_res.img.gen_back_);
         var back_item = cc.MenuItemSprite.create(back_spNormal, back_spSelected,  function() {
             g_director.replaceScene(new (g_ScenesQ.pop())());
         }, this);
@@ -40,7 +40,7 @@ var SiWeiLayer = cc.Layer.extend({
         back_item.setPosition(0, 0);
         this.addChild(leftMenu);
 
-        this._clickParticle = cc.ParticleSystem.create("res/particle/click.plist");
+        this._clickParticle = cc.ParticleSystem.create(g_res.plist.click);
         this.addChild(this._clickParticle);
         this._clickParticle.stopSystem();
     },

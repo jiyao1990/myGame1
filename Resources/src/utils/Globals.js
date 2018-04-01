@@ -59,9 +59,9 @@ var g_zbRoom = function(parent){
 			sp.setAnchorPoint(g_zbNowInfo[i].anchor);
 		}
 	}
-}
+};
 
-function randomNum(minNum,maxNum){ 
+var randomNum = function (minNum,maxNum){ 
     switch(arguments.length){ 
         case 1: 
             return parseInt(Math.random()*minNum+1,10); 
@@ -73,4 +73,6 @@ function randomNum(minNum,maxNum){
                 return 0; 
             break; 
     } 
-} 
+};
+
+var g_date = new Date();

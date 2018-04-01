@@ -57,7 +57,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     // set FPS. the default value is 1.0/60 if you don't call this
     pDirector->setAnimationInterval(1.0 / 60);
     
-    Live2D::init();
+//    Live2D::init();
     //CCLOG("hello");
     
 #ifdef L2D_TARGET_ANDROID_ES2

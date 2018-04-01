@@ -43,7 +43,7 @@ var MainLayer = cc.Layer.extend({
         // this.addChild(this._uiNode.bg);
         // this._uiNode.bg.setPosition(this.getContentSize().width / 2, this.getContentSize().height / 2);
 
-        // var bgSp = cc.Sprite.create("res/scenes/mainScene/bg.png");
+        // var bgSp = cc.Sprite.create(g_res.img.gen_bg);
         // this._uiNode.bg.addChild(bgSp);
 
         this._uiNode.bg = AutoFitNode.create(scaleMode.FitOut);
@@ -53,7 +53,7 @@ var MainLayer = cc.Layer.extend({
         this._uiNode.bg.setPosition(this.getContentSize().width / 2, this.getContentSize().height / 2);
         cc.log("width:" + this.getContentSize().width + "   height:" + this.getContentSize().height);
 
-        var bgSp = cc.Sprite.create("res/scenes/mainScene/bg.png");
+        var bgSp = cc.Sprite.create(g_res.img.gen_bg);
         bgSp.setPosition(this._uiNode.bg.getContentSize().width / 2 , this._uiNode.bg.getContentSize().height / 2);
         this._uiNode.bg.addChild(bgSp);
 
@@ -70,9 +70,9 @@ var MainLayer = cc.Layer.extend({
         this._uiNode.left.setPosition(0, this.getContentSize().height);
 
         var leftMenu = cc.Menu.create();
-        for (var i = 0; i < 3; i++) {
-            var spNormal = cc.Sprite.create("res/scenes/mainScene/left_"+i+".png");
-            var spSelected = cc.Sprite.create("res/scenes/mainScene/left_"+i+"_.png");
+        for (var i = 0; i < g_res.img.sce_mai_left.length; i++) {
+            var spNormal = cc.Sprite.create(g_res.img.sce_mai_left[i]);
+            var spSelected = cc.Sprite.create(g_res.img.sce_mai_left_[i]);
             var item = cc.MenuItemSprite.create(spNormal, spSelected,  this.onLeftBtnCallback, this);
             item.setTag(i);
             leftMenu.addChild(item);
@@ -81,8 +81,8 @@ var MainLayer = cc.Layer.extend({
         this._uiNode.left.addChild(leftMenu);
         leftMenu.setPosition(0,0);
 
-        var back_spNormal = cc.Sprite.create("res/scenes/mainScene/back.png");
-        var back_spSelected = cc.Sprite.create("res/scenes/mainScene/back_.png");
+        var back_spNormal = cc.Sprite.create(g_res.img.gen_back);
+        var back_spSelected = cc.Sprite.create(g_res.img.gen_back_);
         var back_item = cc.MenuItemSprite.create(back_spNormal, back_spSelected,  this.onBackBtnCallback, this);
         leftMenu.addChild(back_item);
         back_item.setAnchorPoint(0, 0);
@@ -95,12 +95,12 @@ var MainLayer = cc.Layer.extend({
         this._uiNode.top.setAnchorPoint(0.5, 1);
         this._uiNode.top.setPosition(this.getContentSize().width / 2, this.getContentSize().height);
 
-        var topBg = cc.Sprite.create("res/scenes/mainScene/top.png");
+        var topBg = cc.Sprite.create(g_res.img.gen_dou_bg);
         this._uiNode.top.addChild(topBg);
         topBg.setAnchorPoint(0.5, 1);
         topBg.setPosition(this._uiNode.top.getContentSize().width / 2, this._uiNode.top.getContentSize().height);
 
-        var dou = cc.Sprite.create("res/scenes/mainScene/dou.png");
+        var dou = cc.Sprite.create(g_res.img.gen_dou);
         topBg.addChild(dou);
         dou.setPosition(95, 65);
 
@@ -119,8 +119,8 @@ var MainLayer = cc.Layer.extend({
         
 
         for (var i = 0; i < 4; i++) {
-            var spNormal = cc.Sprite.create("res/scenes/mainScene/bottom_"+i+".png");
-            var spSelected = cc.Sprite.create("res/scenes/mainScene/bottom_"+i+"_.png");
+            var spNormal = cc.Sprite.create(g_res.img.sce_mai_bottom[i]);
+            var spSelected = cc.Sprite.create(g_res.img.sce_mai_bottom_[i]);
             var item = cc.MenuItemSprite.create(spNormal, spSelected,  this.onBottomBtnCallback, this);
             item.setTag(i);
             bottomMenu.addChild(item);
@@ -130,12 +130,12 @@ var MainLayer = cc.Layer.extend({
             item.setPosition(back_item.getContentSize().width + length / 8 + (length / 4) * i, 0);
 
             if (i == 2) {
-                var bottom_2_0 = cc.Sprite.create("res/scenes/mainScene/bottom_2_0.png");
+                var bottom_2_0 = cc.Sprite.create(g_res.img.sce_mai_bottom_2_0);
                 item.addChild(bottom_2_0);
                 bottom_2_0.setAnchorPoint(0,0);
                 bottom_2_0.setPosition(45, 75);
 
-                var bottom_2_1 = cc.Sprite.create("res/scenes/mainScene/bottom_2_1.png");
+                var bottom_2_1 = cc.Sprite.create(g_res.img.sce_mai_bottom_2_1);
                 item.addChild(bottom_2_1);
                 bottom_2_1.setAnchorPoint(0,0);
                 bottom_2_1.setPosition(120, 75);
@@ -155,8 +155,8 @@ var MainLayer = cc.Layer.extend({
         var rightMenu = cc.Menu.create();
 
 
-        var hide_spNormal = cc.Sprite.create("res/scenes/mainScene/hide.png");
-        var hide_spSelected = cc.Sprite.create("res/scenes/mainScene/hide_.png");
+        var hide_spNormal = cc.Sprite.create(g_res.img.gen_hide);
+        var hide_spSelected = cc.Sprite.create(g_res.img.gen_hide_);
         this._hideBtn = cc.MenuItemSprite.create(hide_spNormal, hide_spSelected,  this.onLasuoBtnCallback, this);
         rightMenu.addChild(this._hideBtn);
         this._hideBtn.setAnchorPoint(1, 0);
@@ -169,14 +169,14 @@ var MainLayer = cc.Layer.extend({
         // lasuo_item.setAnchorPoint(1, 1);
         // lasuo_item.setPosition(this._uiNode.right.getContentSize().width - lasuo_item.getContentSize().width, this._uiNode.right.getContentSize().height);
 
-        var email_spNormal = cc.Sprite.create("res/scenes/mainScene/email.png");
-        var email_spSelected = cc.Sprite.create("res/scenes/mainScene/email_.png");
+        var email_spNormal = cc.Sprite.create(g_res.img.sce_mai_email);
+        var email_spSelected = cc.Sprite.create(g_res.img.sce_mai_email_);
         var email_item = cc.MenuItemSprite.create(email_spNormal, email_spSelected,  this.onEmailBtnCallback, this);
         rightMenu.addChild(email_item);
         email_item.setAnchorPoint(1, 1);
         email_item.setPosition(this._uiNode.right.getContentSize().width - 20, this._uiNode.right.getContentSize().height);
 
-        var redDot = cc.Sprite.create("res/scenes/mainScene/red_dot.png");
+        var redDot = cc.Sprite.create(g_res.img.sce_mai_red_dot);
         email_item.addChild(redDot);
         redDot.setPosition(email_item.getContentSize().width - 20, email_item.getContentSize().height - 20);
         redDot.setScale(0.7);
@@ -187,8 +187,8 @@ var MainLayer = cc.Layer.extend({
             redDot.setVisible(false);
         }
 
-        var parent_spNormal = cc.Sprite.create("res/scenes/mainScene/parent.png");
-        var parent_spSelected = cc.Sprite.create("res/scenes/mainScene/parent_.png");
+        var parent_spNormal = cc.Sprite.create(g_res.img.sce_mai_parent);
+        var parent_spSelected = cc.Sprite.create(g_res.img.sce_mai_parent_);
         var parent_item = cc.MenuItemSprite.create(parent_spNormal, parent_spSelected,  this.onParentBtnCallback, this);
         rightMenu.addChild(parent_item);
         parent_item.setAnchorPoint(1, 1);
@@ -197,7 +197,7 @@ var MainLayer = cc.Layer.extend({
         this._uiNode.right.addChild(rightMenu);
         rightMenu.setPosition(0,0);
 
-        this._clickParticle = cc.ParticleSystem.create("res/particle/click.plist");
+        this._clickParticle = cc.ParticleSystem.create(g_res.plist.click);
         this.addChild(this._clickParticle);
         this._clickParticle.stopSystem();
 

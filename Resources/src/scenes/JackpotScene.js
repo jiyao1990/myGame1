@@ -39,8 +39,8 @@ var JackpotLayer = cc.Layer.extend({
         // this.addChild(title);
         // title.setPosition(this.getContentSize().width / 2 , this.getContentSize().height / 2);
 
-        // var back_spNormal = cc.Sprite.create("res/scenes/mainScene/back.png");
-        // var back_spSelected = cc.Sprite.create("res/scenes/mainScene/back_.png");
+        // var back_spNormal = cc.Sprite.create(g_res.img.gen_back);
+        // var back_spSelected = cc.Sprite.create(g_res.img.gen_back_);
         // var back_item = cc.MenuItemSprite.create(back_spNormal, back_spSelected,  function() {
         //     g_director.replaceScene(new g_preScene());
         // }, this);
@@ -57,11 +57,11 @@ var JackpotLayer = cc.Layer.extend({
         this._uiNode.bg.setPosition(this.getContentSize().width / 2, this.getContentSize().height / 2);
         cc.log("width:" + this.getContentSize().width + "   height:" + this.getContentSize().height);
 
-        var bgSp = cc.Sprite.create("res/scenes/jackpotScene/bg.png");
+        var bgSp = cc.Sprite.create(g_res.img.sce_jac_bg);
         bgSp.setPosition(this._uiNode.bg.getContentSize().width / 2 , this._uiNode.bg.getContentSize().height / 2);
         this._uiNode.bg.addChild(bgSp);
 
-        var bgSp1 = cc.Sprite.create("res/scenes/jackpotScene/bg_0.png");
+        var bgSp1 = cc.Sprite.create(g_res.img.sce_jac_bg_0);
         bgSp1.setAnchorPoint(0.5, 1);
         bgSp1.setPosition(this._uiNode.bg.getContentSize().width / 2 , this._uiNode.bg.getContentSize().height - 40);
         this._uiNode.bg.addChild(bgSp1);
@@ -72,16 +72,16 @@ var JackpotLayer = cc.Layer.extend({
         this._uiNode.left.setAnchorPoint(0, 0);
         this._uiNode.left.setPosition(0, 0);
 
-        var back_spNormal = cc.Sprite.create("res/scenes/mainScene/back.png");
-        var back_spSelected = cc.Sprite.create("res/scenes/mainScene/back_.png");
+        var back_spNormal = cc.Sprite.create(g_res.img.gen_back);
+        var back_spSelected = cc.Sprite.create(g_res.img.gen_back_);
         var back_item = cc.MenuItemSprite.create(back_spNormal, back_spSelected,  function() {
             g_director.replaceScene(new (g_ScenesQ.pop())());
         }, this);
         back_item.setAnchorPoint(0, 0);
         back_item.setPosition(0, 0);
 
-        var myCenter_spNormal = cc.Sprite.create("res/scenes/myHouseScene/left_0.png");
-        var myCenter_spSelected = cc.Sprite.create("res/scenes/myHouseScene/left_0_.png");
+        var myCenter_spNormal = cc.Sprite.create(g_res.img.gen_personal);
+        var myCenter_spSelected = cc.Sprite.create(g_res.img.gen_personal_);
         var myCenter_item = cc.MenuItemSprite.create(myCenter_spNormal, myCenter_spSelected,  function() {
             // g_preScene = JackpotScene;
             g_ScenesQ.push(JackpotScene);
@@ -101,17 +101,17 @@ var JackpotLayer = cc.Layer.extend({
         this._uiNode.center.setAnchorPoint(0.5, 0.5);
         this._uiNode.center.setPosition(this.getContentSize().width / 2, this.getContentSize().height / 2);
 
-        var bg_1 = cc.Sprite.create("res/scenes/jackpotScene/bg_1.png");
+        var bg_1 = cc.Sprite.create(g_res.img.sce_jac_bg_1);
         bg_1.setAnchorPoint(0.5, 0.5);
         bg_1.setPosition(this._uiNode.center.getContentSize().width / 2 , this._uiNode.center.getContentSize().height / 2);
         this._uiNode.center.addChild(bg_1);
 
-        this._gift_close = cc.Sprite.create("res/scenes/jackpotScene/gift_close.png");
+        this._gift_close = cc.Sprite.create(g_res.img.sce_jac_gift_close);
         this._gift_close.setAnchorPoint(0.5, 0.5);
         this._gift_close.setPosition(bg_1.getContentSize().width / 2 , bg_1.getContentSize().height / 2);
         bg_1.addChild(this._gift_close);
 
-        this._gift_open = cc.Sprite.create("res/scenes/jackpotScene/gift_open.png");
+        this._gift_open = cc.Sprite.create(g_res.img.sce_jac_gift_open);
         this._gift_open.setAnchorPoint(0.5, 0.5);
         this._gift_open.setPosition(bg_1.getContentSize().width / 2 , bg_1.getContentSize().height / 2);
         bg_1.addChild(this._gift_open);
@@ -124,7 +124,7 @@ var JackpotLayer = cc.Layer.extend({
         this._uiNode.bottom.setAnchorPoint(0.5, 0);
         this._uiNode.bottom.setPosition(this.getContentSize().width / 2, 0);
 
-        var btn_getNormal = cc.Sprite.create("res/scenes/jackpotScene/btn_get.png");
+        var btn_getNormal = cc.Sprite.create(g_res.img.sce_jac_btn_get);
 
         var ttf_douNum0 = cc.LabelTTF.create("10", "Arial", 40);
         ttf_douNum0.setAnchorPoint(0.5, 0);
@@ -132,7 +132,7 @@ var JackpotLayer = cc.Layer.extend({
         btn_getNormal.addChild(ttf_douNum0);
         ttf_douNum0.setPosition(140, 35);
 
-        var btn_getSelected = cc.Sprite.create("res/scenes/jackpotScene/btn_get_.png");
+        var btn_getSelected = cc.Sprite.create(g_res.img.sce_jac_btn_get_);
         var ttf_douNum1 = cc.LabelTTF.create("10", "Arial", 40);
         ttf_douNum1.setAnchorPoint(0.5, 0);
         ttf_douNum1.setColor(cc.c3b(251, 101, 32));
@@ -140,12 +140,13 @@ var JackpotLayer = cc.Layer.extend({
         ttf_douNum1.setPosition(140, 35);
 
 
-        var btn_getItem = cc.MenuItemSprite.create(btn_getNormal, btn_getSelected,  function() {
-
+        var btn_getItem = cc.MenuItemSprite.create(btn_getNormal, btn_getSelected,  function(sender) {
+            sender.setEnabled(false);
             this._gift_close.runAction(cc.Sequence.create(cc.FadeOut.create(0.5), cc.Hide.create()));
             this._gift_open.runAction(cc.Sequence.create(cc.DelayTime.create(0.5), cc.Show.create(), cc.FadeIn.create(0.5), 
                 cc.CallFunc.create(
                     function(){
+                        sender.setEnabled(true);
                         var dialog = new Dialog();
                         cc.log("randomNum(0,15): " + randomNum(0,15));
                         dialog.init(DialogType.getItem, randomNum(0,15));
@@ -163,40 +164,39 @@ var JackpotLayer = cc.Layer.extend({
         btn_getItem.setAnchorPoint(0, 0);
         btn_getItem.setPosition(0, 0);
 
-        var btn_get10Normal = cc.Sprite.create("res/scenes/jackpotScene/btn_get10.png");
+        var btn_get10Normal = cc.Sprite.create(g_res.img.sce_jac_btn_get10);
         var ttf10_douNum0 = cc.LabelTTF.create("95", "Arial", 40);
         ttf10_douNum0.setAnchorPoint(0.5, 0);
         ttf10_douNum0.setColor(cc.c3b(251, 101, 32));
         btn_get10Normal.addChild(ttf10_douNum0);
         ttf10_douNum0.setPosition(140, 35);
 
-        var btn_get10Selected = cc.Sprite.create("res/scenes/jackpotScene/btn_get10_.png");
+        var btn_get10Selected = cc.Sprite.create(g_res.img.sce_jac_btn_get10_);
         var ttf10_douNum1 = cc.LabelTTF.create("95", "Arial", 40);
         ttf10_douNum1.setAnchorPoint(0.5, 0);
         ttf10_douNum1.setColor(cc.c3b(251, 101, 32));
         btn_get10Selected.addChild(ttf10_douNum1);
         ttf10_douNum1.setPosition(140, 35);
 
-        var btn_get10Item = cc.MenuItemSprite.create(btn_get10Normal, btn_get10Selected,  function() {
+        var btn_get10Item = cc.MenuItemSprite.create(btn_get10Normal, btn_get10Selected,  function(sender) {
+            sender.setEnabled(false);
             this._gift_close.runAction(cc.Sequence.create(cc.FadeOut.create(0.5), cc.Hide.create()));
             this._gift_open.runAction(cc.Sequence.create(cc.DelayTime.create(0.5), cc.Show.create(), cc.FadeIn.create(0.5), 
                 cc.CallFunc.create(
                     function(){
+                        sender.setEnabled(true);
                         var dialog = new Dialog();
-                        // cc.log("randomNum(0,15): " + randomNum(0,15));
                         var data = [];
                         for (var i = 0; i < 10; i++) {
                             var type = randomNum(0,15);
                             data.push(type);
                             for (var j = 0; j < data.length - 1; j++) {
                                 if (data[j] == type) {
-                                    cc.log("type:" + type + " data.length:" + data.length);
                                     data.pop();
                                     i --;
                                 }
                             }
                         }
-                        cc.log("data.length:" + data.length);
                         dialog.init(DialogType.getItem10, data);
                         this.addChild(dialog);
 
@@ -222,12 +222,12 @@ var JackpotLayer = cc.Layer.extend({
         this._uiNode.top.setAnchorPoint(0.5, 1);
         this._uiNode.top.setPosition(this.getContentSize().width / 2, this.getContentSize().height);
 
-        var topBg = cc.Sprite.create("res/scenes/mainScene/top.png");
+        var topBg = cc.Sprite.create(g_res.img.gen_dou_bg);
         this._uiNode.top.addChild(topBg);
         topBg.setAnchorPoint(0.5, 1);
         topBg.setPosition(this._uiNode.top.getContentSize().width / 2, this._uiNode.top.getContentSize().height);
 
-        var dou = cc.Sprite.create("res/scenes/mainScene/dou.png");
+        var dou = cc.Sprite.create(g_res.img.gen_dou);
         topBg.addChild(dou);
         dou.setPosition(95, 65);
 
@@ -235,7 +235,7 @@ var JackpotLayer = cc.Layer.extend({
         topBg.addChild(this._douNumLabel);
         this._douNumLabel.setPosition(278, 65);
 
-        this._clickParticle = cc.ParticleSystem.create("res/particle/click.plist");
+        this._clickParticle = cc.ParticleSystem.create(g_res.plist.click);
         this.addChild(this._clickParticle);
         this._clickParticle.stopSystem();
     },

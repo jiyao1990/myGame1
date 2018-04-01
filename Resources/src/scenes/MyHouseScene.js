@@ -4,9 +4,7 @@ var CustomTableViewCell = cc.TableViewCell.extend({
     }
 });
 
-var ZBName = [
-    '墙面装饰', '天花板装饰', '门', '窗户', '墙纸', '地面', '室内装饰1', '室内装饰2', '室内装饰3', '天花板', '套装效果'
-];
+var myHousePathRoot = "res/scenes/myHouseScene/";
 
 var MyHouseLayer = cc.Layer.extend({
 
@@ -75,7 +73,7 @@ var MyHouseLayer = cc.Layer.extend({
             this.addChild(dialog);
         }
 
-        this._clickParticle = cc.ParticleSystem.create("res/particle/click.plist");
+        this._clickParticle = cc.ParticleSystem.create(g_res.plist.click);
         this.addChild(this._clickParticle);
         this._clickParticle.stopSystem();
         return true;
@@ -126,7 +124,7 @@ var MyHouseLayer = cc.Layer.extend({
         }
 
         this._leftTable.reloadData();
-        for (var i = 0; i < ZBName.length; i++) {
+        for (var i = 0; i < g_res.img.sce_myh_left_btn.length; i++) {
             this._bottomTable[i].reloadData()
             this._bottomTable[i].setVisible(false);
         }
@@ -210,7 +208,6 @@ var MyHouseLayer = cc.Layer.extend({
         var indexs = [];
 
         for (var i = this._zbSps.length - 1; i >= 0; i--) {
-            cc.log("i1:" + i + " this._zbSps.length:" + this._zbSps.length);
             if (this.containsTouchLocation(this._zbSps[i], touch)) {
                 cc.log("i2:" + i);
                 indexs.push(i);
@@ -218,10 +215,8 @@ var MyHouseLayer = cc.Layer.extend({
             }
         }
 
-        cc.log("indexs.length:" + indexs.length);
         if (indexs.length == 1) {
             this._zbSelectIdx = indexs[0];
-            cc.log("indexs.length:" + indexs.length);
             this._zbIsCanMove = true;
             if (this._zbSps[this._zbSelectIdx].getZOrder() < 10) {
                 this._zbSps[this._zbSelectIdx].setZOrder(this._zbSps[this._zbSelectIdx].getZOrder() * 10);
@@ -247,7 +242,6 @@ var MyHouseLayer = cc.Layer.extend({
                 }
                 
             }
-            cc.log("i: " + i + " zoder:" + this._zbSps[i].getZOrder());
         }
         
         
@@ -275,7 +269,6 @@ var MyHouseLayer = cc.Layer.extend({
             if (this._zbSps[i].getZOrder() > 10) {
                 this._zbSps[i].setZOrder(this._zbSps[i].getZOrder() / 10);
             }
-            cc.log("i: " + i + " zoder:" + this._zbSps[i].getZOrder());
         }
 
         for (var i = this._zbNow.length - 1; i >= 0; i--) {
@@ -293,9 +286,8 @@ var MyHouseLayer = cc.Layer.extend({
         this.bg.setContentSize(default_winSize.width, default_winSize.height);
         this.bg.setAnchorPoint(0.5, 0.5);
         this.bg.setPosition(this.getContentSize().width / 2, this.getContentSize().height / 2);
-        cc.log("width:" + this.getContentSize().width + "   height:" + this.getContentSize().height);
 
-        var bgSp = cc.Sprite.create("res/scenes/mainScene/bg.png");
+        var bgSp = cc.Sprite.create(g_res.img.gen_bg);
         bgSp.setPosition(this.bg.getContentSize().width / 2 , this.bg.getContentSize().height / 2);
         this.bg.addChild(bgSp);
 
@@ -308,9 +300,9 @@ var MyHouseLayer = cc.Layer.extend({
         this._uiNode.left.setPosition(0, this.getContentSize().height);
 
         var leftMenu = cc.Menu.create();
-        for (var i = 0; i < 4; i++) {
-            var spNormal = cc.Sprite.create("res/scenes/myHouseScene/left_"+i+".png");
-            var spSelected = cc.Sprite.create("res/scenes/myHouseScene/left_"+i+"_.png");
+        for (var i = 0; i < g_res.img.sce_myh_left.length; i++) {
+            var spNormal = cc.Sprite.create(g_res.img.sce_myh_left[i]);
+            var spSelected = cc.Sprite.create(g_res.img.sce_myh_left_[i]);
             var item = cc.MenuItemSprite.create(spNormal, spSelected,  this.onLeftBtnCallback, this);
             item.setTag(i);
             leftMenu.addChild(item);
@@ -319,8 +311,8 @@ var MyHouseLayer = cc.Layer.extend({
         this._uiNode.left.addChild(leftMenu);
         leftMenu.setPosition(0,0);
 
-        var back_spNormal = cc.Sprite.create("res/scenes/mainScene/back.png");
-        var back_spSelected = cc.Sprite.create("res/scenes/mainScene/back_.png");
+        var back_spNormal = cc.Sprite.create(g_res.img.gen_back);
+        var back_spSelected = cc.Sprite.create(g_res.img.gen_back_);
         var back_item = cc.MenuItemSprite.create(back_spNormal, back_spSelected,  this.onBackBtnCallback, this);
         leftMenu.addChild(back_item);
         back_item.setAnchorPoint(0, 0);
@@ -333,12 +325,12 @@ var MyHouseLayer = cc.Layer.extend({
         this._uiNode.top.setAnchorPoint(0.5, 1);
         this._uiNode.top.setPosition(this.getContentSize().width / 2, this.getContentSize().height);
 
-        var topBg = cc.Sprite.create("res/scenes/mainScene/top.png");
+        var topBg = cc.Sprite.create(g_res.img.gen_dou_bg);
         this._uiNode.top.addChild(topBg);
         topBg.setAnchorPoint(0.5, 1);
         topBg.setPosition(this._uiNode.top.getContentSize().width / 2, this._uiNode.top.getContentSize().height);
 
-        var dou = cc.Sprite.create("res/scenes/mainScene/dou.png");
+        var dou = cc.Sprite.create(g_res.img.gen_dou);
         topBg.addChild(dou);
         dou.setPosition(95, 65);
 
@@ -355,8 +347,8 @@ var MyHouseLayer = cc.Layer.extend({
 
         var rightMenu = cc.Menu.create();
 
-        var hide_spNormal = cc.Sprite.create("res/scenes/mainScene/hide.png");
-        var hide_spSelected = cc.Sprite.create("res/scenes/mainScene/hide_.png");
+        var hide_spNormal = cc.Sprite.create(g_res.img.gen_hide);
+        var hide_spSelected = cc.Sprite.create(g_res.img.gen_hide_);
         this._hideBtn = cc.MenuItemSprite.create(hide_spNormal, hide_spSelected,  this.onLasuoBtnCallback, this);
         rightMenu.addChild(this._hideBtn);
         this._hideBtn.setAnchorPoint(1, 1);
@@ -380,14 +372,14 @@ var MyHouseLayer = cc.Layer.extend({
         this._zbNode.left.setAnchorPoint(0, 1);
         this._zbNode.left.setPosition(0, this.getContentSize().height);
 
-        var left_bg_0 = cc.Sprite.create("res/scenes/myHouseScene/left_bg_0.png");
+        var left_bg_0 = cc.Sprite.create(g_res.img.sce_myh_left_bg_0);
         this._zbNode.left.addChild(left_bg_0);
         left_bg_0.setAnchorPoint(0, 1);
         left_bg_0.setPosition(0, this._zbNode.left.getContentSize().height);
         left_bg_0.setScale(fitScaleIn);
 
 
-        var left_bg_1 = cc.Sprite.create("res/scenes/myHouseScene/left_bg_1.png");
+        var left_bg_1 = cc.Sprite.create(g_res.img.sce_myh_left_bg_1);
         left_bg_0.addChild(left_bg_1);
         left_bg_1.setPosition(18, 40);
         left_bg_1.setAnchorPoint(0, 0);
@@ -410,13 +402,13 @@ var MyHouseLayer = cc.Layer.extend({
         this._zbNode.bottom.setAnchorPoint(0.5, 0);
         this._zbNode.bottom.setPosition(this.getContentSize().width / 2, 0);
 
-        var bottom_bg = cc.Sprite.create("res/scenes/myHouseScene/bottom_bg.png");
+        var bottom_bg = cc.Sprite.create(g_res.img.sce_myh_bottom_bg);
         this._zbNode.bottom.addChild(bottom_bg);
         bottom_bg.setPosition(this._zbNode.bottom.getContentSize().width / 2, 0);
         bottom_bg.setAnchorPoint(0.5, 0);
         bottom_bg.setZOrder(-1);
 
-        for (var i = 0; i < ZBName.length; i++) {
+        for (var i = 0; i < g_res.img.sce_myh_left_btn.length; i++) {
             this._bottomTable[i] = cc.TableView.create(this, cc.size(800, 140));
             this._bottomTable[i].setTag(1000 + i);
             this._bottomTable[i].setDirection(cc.SCROLLVIEW_DIRECTION_HORIZONTAL);
@@ -434,16 +426,16 @@ var MyHouseLayer = cc.Layer.extend({
         for (var i = 0; i < 2; i++) {
             
             if (i == 1) {
-                var spNormal = cc.Sprite.create("res/scenes/mainScene/back.png");
-                var spSelected = cc.Sprite.create("res/scenes/mainScene/back_.png");
+                var spNormal = cc.Sprite.create(g_res.img.gen_back);
+                var spSelected = cc.Sprite.create(g_res.img.gen_back_);
                 var item = cc.MenuItemSprite.create(spNormal, spSelected,  this.onSaveOrBackBtnCallback, this);
                 item.setTag(i);
                 bottomMenu.addChild(item);
                 item.setAnchorPoint(0, 0);
                 item.setPosition(0, 0);
             }else{
-                var spNormal = cc.Sprite.create("res/scenes/myHouseScene/ok.png");
-                var spSelected = cc.Sprite.create("res/scenes/myHouseScene/ok_.png");
+                var spNormal = cc.Sprite.create(g_res.img.sce_myh_ok);
+                var spSelected = cc.Sprite.create(g_res.img.sce_myh_ok_);
                 var item = cc.MenuItemSprite.create(spNormal, spSelected,  this.onSaveOrBackBtnCallback, this);
                 item.setTag(i);
                 bottomMenu.addChild(item);
@@ -523,7 +515,6 @@ var MyHouseLayer = cc.Layer.extend({
 
     tableCellTouched:function (table, cell) {
         if (table.getTag() == 100) {
-            cc.log("1 this._zbSelectType " + this._zbSelectType);
             this._bottomTable[this._zbSelectType].setVisible(false);
             if (table.cellAtIndex(this._zbSelectType + 1)) {
                 table.cellAtIndex(this._zbSelectType + 1).getChildByTag(100).setVisible(true);
@@ -532,14 +523,13 @@ var MyHouseLayer = cc.Layer.extend({
             this._zbSelectType = cell.getIdx() - 1;
             cell.getChildByTag(100).setVisible(false);
             cell.getChildByTag(101).setVisible(true);
-            cc.log("2 this._zbSelectType " + this._zbSelectType);
             this._bottomTable[this._zbSelectType].setVisible(true);
             this._bottomTable[this._zbSelectType].reloadData();
         }else if (table.getTag() >= 1000){
             var type = table.getTag() - 1000;
             var tag = type * 1000 + cell.getIdx();
             if (!this.bg.getChildByTag(tag)) {
-                var sprite = cc.Sprite.create("res/scenes/myHouseScene/" + this._zbData[type][cell.getIdx()]);
+                var sprite = cc.Sprite.create(myHousePathRoot + this._zbData[type][cell.getIdx()]);
                 if (type == 4) {
                     this.bg.addChild(sprite);
                     sprite.setAnchorPoint(0.5, 1);
@@ -573,7 +563,7 @@ var MyHouseLayer = cc.Layer.extend({
                     }
                 }
                 var obj = {};
-                obj.path = "res/scenes/myHouseScene/" + this._zbData[type][cell.getIdx()];
+                obj.path = myHousePathRoot + this._zbData[type][cell.getIdx()];
                 obj.tag = tag;
                 obj.anchor = sprite.getAnchorPoint();
                 obj.zoder = sprite.getZOrder();
@@ -603,13 +593,13 @@ var MyHouseLayer = cc.Layer.extend({
                 }else{
                     idx = idx - 1;
                     cell = new CustomTableViewCell();
-                    var sprite = cc.Sprite.create("res/scenes/myHouseScene/left_btn_" + idx + ".png");
+                    var sprite = cc.Sprite.create(g_res.img.sce_myh_left_btn[idx]);
                     sprite.setAnchorPoint(0, 0);
                     sprite.setPosition(0, 0);
                     cell.addChild(sprite);
                     sprite.setTag(100);
 
-                    var sprite2 = cc.Sprite.create("res/scenes/myHouseScene/left_btn_" + idx + "_.png");
+                    var sprite2 = cc.Sprite.create(g_res.img.sce_myh_left_btn_[idx]);
                     sprite2.setAnchorPoint(0, 0);
                     sprite2.setPosition(0, 0);
                     cell.addChild(sprite2);
@@ -630,7 +620,7 @@ var MyHouseLayer = cc.Layer.extend({
 
                 var type = table.getTag() - 1000;
                 cell = new CustomTableViewCell();
-                var sprite = cc.Sprite.create("res/scenes/myHouseScene/" + this._zbData[type][idx]);
+                var sprite = cc.Sprite.create(myHousePathRoot + this._zbData[type][idx]);
                 sprite.setAnchorPoint(0.5, 0.5);
                 sprite.setPosition(85, 70);
                 var hRatio = 125 / sprite.getContentSize().height;
