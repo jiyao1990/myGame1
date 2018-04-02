@@ -1,8 +1,10 @@
 var g_director = null;
 var g_sex = null;
-var g_douNum = 9999999;
+var g_douNum = 999999;
 var g_preScene = null;
 var g_unreadMail = 7;
+var g_name = "用户昵称";
+var g_age = 12;
 var g_ScenesQ = [];
 var g_zbInfo = [
 	[
@@ -46,6 +48,19 @@ var g_itemData = [
 	{id:14, path:"res/scenes/myHouseScene/zb_0/8_5.png"},
 	{id:15, path:"res/scenes/myHouseScene/zb_0/9_0.png"},
 ];
+
+var g_bagData = {
+	item : [
+		{id:0, name:"道具1", intro:"道具1介绍道具1介绍道具1介绍道具1介绍道具1介绍", count:999, sell:100},
+		{id:1, name:"道具2", intro:"道具1介绍道具1介绍道具1介绍道具1介绍道具1介绍", count:555, sell:200},
+		{id:2, name:"道具3", intro:"道具1介绍道具1介绍道具1介绍道具1介绍道具1介绍", count:333, sell:300},
+	],
+	zb : [
+		{id:3, name:"装饰1", intro:"装饰1介绍装饰1介绍装饰1介绍装饰1介绍装饰1介绍", count:1, sell:1000},
+		{id:6, name:"装饰2", intro:"装饰2介绍装饰2介绍装饰2介绍装饰2介绍装饰2介绍", count:1, sell:2000},
+		{id:8, name:"装饰3", intro:"装饰3介绍装饰3介绍装饰3介绍装饰3介绍装饰3介绍", count:1, sell:3000},
+	],
+} 
 
 var g_zbRoom = function(parent){
 	cc.log("装扮：" + g_zbNowInfo.length);

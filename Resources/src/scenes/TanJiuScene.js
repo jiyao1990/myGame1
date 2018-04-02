@@ -86,6 +86,19 @@ var TanJiuLayer = cc.Layer.extend({
             centerMenu.addChild(item);
             item.setAnchorPoint(0, 1);
             item.setPosition(340 + i % 4 * (item.getContentSize().width + 30), this._uiNode.center.getContentSize().height - 20 - Math.floor(i/4) * (item.getContentSize().height + 10));
+
+            var ttf = cc.LabelTTF.create(i + 1, "Arial", 40);
+            if (this._month_state[i] == 0) {
+                ttf.setColor(cc.c3b(225, 61, 9));
+            }else if(this._month_state[i] == 1){
+                ttf.setColor(cc.c3b(0, 140, 186));
+            }else if(this._month_state[i] == 2){
+                ttf.setColor(cc.c3b(0, 140, 76));
+            }else if(this._month_state[i] == 3){
+                ttf.setColor(cc.c3b(101, 97, 96));
+            }
+            item.addChild(ttf);
+            ttf.setPosition(82, 48);
         }
 
         this._uiNode.bottom = AutoFitNode.create(scaleMode.FitIn);
@@ -173,7 +186,9 @@ var TanJiuLayer = cc.Layer.extend({
     },
 
     onCenterBtnCallback:function (sender) {
-        // body...
+        g_ScenesQ.push(TanJiuScene);
+        var newScene = new TanJiu2Scene();
+        g_director.replaceScene(newScene);
     }
 });
 

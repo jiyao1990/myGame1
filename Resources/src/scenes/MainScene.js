@@ -5,6 +5,7 @@ var MainLayer = cc.Layer.extend({
         top:null,
         bottom:null,
         right:null,
+        center:null,
 
     },
     _douNumLabel:null,
@@ -13,6 +14,7 @@ var MainLayer = cc.Layer.extend({
     _hideBtn:null,
     _clickParticle:null,
     _live2dSp:null,
+    _keleqiu:null,
 
     ctor:function() {
         this._super();
@@ -60,8 +62,30 @@ var MainLayer = cc.Layer.extend({
         g_zbRoom(this._uiNode.bg);
 
         // var live2dsp = cc.Sprite.createLive2D();
-        this._live2dSp = LAppView.create();
-        this.addChild(this._live2dSp);
+        // this._live2dSp = LAppView.create();
+        // this.addChild(this._live2dSp);
+        this._uiNode.center = AutoFitNode.create(scaleMode.FitIn);
+        this.addChild(this._uiNode.center);
+        this._uiNode.center.setContentSize(1000, 1000);
+        this._uiNode.center.setAnchorPoint(0.5, 0.5);
+        this._uiNode.center.setPosition(this.getContentSize().width / 2, this.getContentSize().height / 2);
+
+        var keleqiu = cc.Sprite.create(g_res.animation.role_idle[0]);
+        keleqiu.setScale(2);
+        this._keleqiu = keleqiu;
+        this._uiNode.center.addChild(keleqiu);
+        keleqiu.setPosition(this._uiNode.center.getContentSize().width / 2, this._uiNode.center.getContentSize().height / 2)
+
+        var idle = cc.Animation.create();
+        for (var i = 0; i < g_res.animation.role_idle.length; i++) {
+            idle.addSpriteFrameWithFile(g_res.animation.role_idle[i]);
+        }
+        idle.setDelayPerUnit(1/30);
+        idle.setRestoreOriginalFrame(true);
+
+        var action =cc.Animate.create(idle);
+        keleqiu.runAction(cc.RepeatForever.create(action));
+        action.setTag(101);
 
         this._uiNode.left = AutoFitNode.create(scaleMode.FitIn);
         this.addChild(this._uiNode.left);
@@ -251,7 +275,7 @@ var MainLayer = cc.Layer.extend({
         this._clickParticle.resetSystem();
         this._clickParticle.setPosition(touchPoint);
 
-        this._live2dSp.touchBegan(touch.getLocationInView());
+        // this._live2dSp.touchBegan(touch.getLocationInView());
 
         if (!this._isShowUI) {
             this.onLasuoBtnCallback();
@@ -264,14 +288,27 @@ var MainLayer = cc.Layer.extend({
         var touchPoint = touch.getLocation();
         this._clickParticle.setPosition(touchPoint);
 
-        this._live2dSp.touchMoved(touch.getLocationInView());
+        // this._live2dSp.touchMoved(touch.getLocationInView());
     },
 
     onTouchEnded:function (touch, event){
         cc.log("主页:onTouchEnded");
         this._clickParticle.stopSystem();
 
-        this._live2dSp.touchEnded(touch.getLocationInView());
+        var touchPoint = touch.getLocation();
+
+        if (cc.rectContainsPoint(this._keleqiu.getBoundingBox(), touchPoint)) {
+            var jump = cc.Animation.create();
+            for (var i = 0; i < g_res.animation.role_jump.length; i++) {
+                jump.addSpriteFrameWithFile(g_res.animation.role_jump[i]);
+            }
+            jump.setDelayPerUnit(1/30);
+            jump.setRestoreOriginalFrame(true);
+
+            var action =cc.Animate.create(jump);
+            this._keleqiu.runAction(action);
+        }
+        
     },
 
     onLasuoBtnCallback:function(){

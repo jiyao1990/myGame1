@@ -82,7 +82,9 @@ var QianQiLayer = cc.Layer.extend({
         for (var i = g_res.img.sce_qia_btn.length - 1; i >= 0; i--) {
 
             var item = cc.MenuItemImage.create(g_res.img.sce_qia_btn[i], g_res.img.sce_qia_btn_[i], function(sender){
-
+                g_ScenesQ.push(QianQiScene);
+                var newScene = new QianQi2Scene();
+                g_director.replaceScene(newScene);
             }, this);
             item.setTag(i);
             item.setAnchorPoint(0, 1);
@@ -97,10 +99,26 @@ var QianQiLayer = cc.Layer.extend({
         qianQiSp.addChild(box);
         box.setPosition(277, 72);
 
+        var temp1 = cc.Sprite.create(g_res.img.sce_qia_temp[1]);
+        box.addChild(temp1);
+        temp1.setPosition(box.getContentSize().width / 2, box.getContentSize().height / 2);
+
         var right_bg = cc.Sprite.create(g_res.img.sce_qia_right_bg);
         right_bg.setAnchorPoint(0,0);
         qianQiSp.addChild(right_bg);
         right_bg.setPosition(805, 88);
+
+        var temp0 = cc.MenuItemImage.create(g_res.img.sce_qia_temp[0], g_res.img.sce_qia_temp[0], function(sender){
+                        g_ScenesQ.push(QianQiScene);
+                        var newScene = new QianQi3Scene();
+                        g_director.replaceScene(newScene);
+                    }, this);
+        var temp_menu = cc.Menu.create(temp0);
+        temp_menu.setPosition(0,0);
+        right_bg.addChild(temp_menu);
+        temp0.setAnchorPoint(0.5,0);
+        temp0.setPosition(right_bg.getContentSize().width / 2, 17);
+
 
         var tuijianMenu = cc.Menu.create();
         tuijianMenu.setPosition(0,0);
@@ -195,7 +213,7 @@ var QianQiLayer = cc.Layer.extend({
     },
 
     onTouchBegan: function (touch, event) {
-        cc.log("签到:touch");
+        cc.log("千奇百怪:touch");
         var touchPoint = touch.getLocation();
         this._clickParticle.resetSystem();
         this._clickParticle.setPosition(touchPoint);

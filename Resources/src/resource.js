@@ -22,6 +22,8 @@ var g_res = {
         gen_hide_ : "res/general/hide_.png",
         gen_title_bg : "res/general/title_bg.png",
         gen_role : getListPath("res/general/role/", ".png", 13),
+        gen_confirm : "res/general/confirm.png",
+        gen_confirm_ : "res/general/confirm_.png",
 
         dia_bg : "res/dialog/dialog_bg.png",
         dia_btn_ok : "res/dialog/btn_ok.png",
@@ -41,6 +43,8 @@ var g_res = {
         dia_shop_1_btn_buy : "res/dialog/shop_1/btn_buy.png",
         dia_shop_1_btn_giveup_ : "res/dialog/shop_1/btn_giveup_.png",
         dia_shop_1_btn_giveup : "res/dialog/shop_1/btn_giveup.png",
+
+        item : getListPath("res/item/", ".png", 3),
 
 
         sce_jac_bg : "res/scenes/jackpotScene/bg.png",
@@ -98,6 +102,30 @@ var g_res = {
         sce_myc_tanjiu_top_ : getListPath("res/scenes/myCenterScene/tanjiu/top_", "_.png", 5),
         sce_myc_qianqi_top : getListPath("res/scenes/myCenterScene/qianqi/top_", ".png", 1),
         sce_myc_qianqi_top_ : getListPath("res/scenes/myCenterScene/qianqi/top_", "_.png", 1),
+        sce_myc_info_top_0_boy : "res/scenes/myCenterScene/info/top_0/boy.png",
+        sce_myc_info_top_0_pao : "res/scenes/myCenterScene/info/top_0/pao.png",
+        sce_myc_info_top_0_vip : "res/scenes/myCenterScene/info/top_0/vip.png",
+        sce_myc_info_top_1_dou_bg : "res/scenes/myCenterScene/info/top_1/dou_bg.png",
+        sce_myc_info_top_1_info_bg : "res/scenes/myCenterScene/info/top_1/info_bg.png",
+        sce_myc_info_top_1_head : getListPath("res/scenes/myCenterScene/info/top_1/head_", ".png", 2),
+        sce_myc_info_top_1_btn : getListPath("res/scenes/myCenterScene/info/top_1/btn_", ".png", 3),
+        sce_myc_info_top_1_btn_ : getListPath("res/scenes/myCenterScene/info/top_1/btn_", "_.png", 3),
+        sce_myc_info_top_2_btn : getListPath("res/scenes/myCenterScene/info/top_2/btn_", ".png", 2),
+        sce_myc_info_top_2_btn_ : getListPath("res/scenes/myCenterScene/info/top_2/btn_", "_.png", 2),
+        sce_myc_info_top_2_bar : "res/scenes/myCenterScene/info/top_2/bar.png",
+        sce_myc_info_top_2_contrl : "res/scenes/myCenterScene/info/top_2/contrl.png",
+        sce_myc_info_top_2_item_bg : "res/scenes/myCenterScene/info/top_2/item_bg.png",
+        sce_myc_info_top_2_left_bg : "res/scenes/myCenterScene/info/top_2/left_bg.png",
+        sce_myc_info_top_2_right_bg : "res/scenes/myCenterScene/info/top_2/right_bg.png",
+        sce_myc_info_top_2_sell : "res/scenes/myCenterScene/info/top_2/sell.png",
+        sce_myc_info_top_2_sell_ : "res/scenes/myCenterScene/info/top_2/sell_.png",
+        sce_myc_info_top_3_temp : getListPath("res/scenes/myCenterScene/info/top_3/temp", ".png", 1),
+        sce_myc_qianqi_top_0_temp : getListPath("res/scenes/myCenterScene/qianqi/top_0/temp", ".png", 1),
+        sce_myc_qianqi_top_1_temp : getListPath("res/scenes/myCenterScene/qianqi/top_1/temp", ".png", 3),
+        sce_myc_qianqi_top_2_temp : getListPath("res/scenes/myCenterScene/qianqi/top_2/temp", ".png", 2),
+        sce_myc_qianqi_top_3_temp : getListPath("res/scenes/myCenterScene/qianqi/top_3/temp", ".png", 1),
+        sce_myc_qianqi_top_4_temp : getListPath("res/scenes/myCenterScene/qianqi/top_4/temp", ".png", 1),
+        sce_myc_tanjiu_temp : getListPath("res/scenes/myCenterScene/tanjiu/temp", ".png", 1),
         
         sce_tan_bg : "res/scenes/tanJiuScene/bg.png",
         sce_tan_title : "res/scenes/tanJiuScene/title.png",
@@ -105,6 +133,7 @@ var g_res = {
         sce_tan_ch_bg : "res/scenes/tanJiuScene/ch_bg.png",
         sce_tan_item : getListPath("res/scenes/tanJiuScene/item_", ".png", 4),
         sce_tan_item_ : "res/scenes/tanJiuScene/item_0_.png",
+        sce_tan_temp : getListPath("res/scenes/tanJiuScene/temp", ".png", 2),
 
         sce_mail_bg : "res/scenes/mailScene/bg.png",
         sce_mail_btn_del_ : "res/scenes/mailScene/btn_del_.png",
@@ -140,6 +169,7 @@ var g_res = {
         sce_qia_right_bg:"res/scenes/qianQiScene/right_bg.png",
         sce_qia_top:getListPath("res/scenes/qianQiScene/top_", ".png", 2),
         sce_qia_top_:getListPath("res/scenes/qianQiScene/top_", "_.png", 2),
+        sce_qia_temp : getListPath("res/scenes/qianQiScene/temp", ".png", 4),
     },
     //plist
     plist : {
@@ -155,7 +185,14 @@ var g_res = {
     
     //txt
     txt : {
+        vip : "小朋友，你是会员了哦！",
+        stop : "功能暂未开放！",
+    },
 
+    //animation
+    animation : {
+        role_idle:getListPath("res/role/idle/", ".png", 220),
+        role_jump:getListPath("res/role/jump/", ".png", 46),
     },
 };
 

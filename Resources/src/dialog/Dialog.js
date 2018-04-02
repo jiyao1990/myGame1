@@ -4,6 +4,8 @@ var DialogType = {
     getItem10 : 3,
     shop_0 : 4,
     shop_1 : 5,
+
+    temp : 999,
 };
 
 var Dialog = cc.LayerColor.extend({
@@ -37,6 +39,10 @@ var Dialog = cc.LayerColor.extend({
                 case DialogType.shop_1:
                     this.createShop_1Node();
                 break;
+
+                case DialogType.temp:
+                    this.createTemp();
+                break;;
                 
             }
 
@@ -219,6 +225,19 @@ var Dialog = cc.LayerColor.extend({
         bg.addChild(menu);
     },
 
+    createTemp: function(){
+        var _rootNode = AutoFitNode.create(scaleMode.FitOut);
+        this.addChild(_rootNode);
+        _rootNode.setPosition(this.getContentSize().width / 2, this.getContentSize().height / 2-20);
+
+        var bg = cc.Sprite.create(g_res.img.dia_bg);
+        _rootNode.addChild(bg);
+
+        var ttf = cc.LabelTTF.create(g_res.txt.stop, "Arial", 40);
+        bg.addChild(ttf);
+        ttf.setPosition(bg.getContentSize().width / 2, bg.getContentSize().height / 2);
+    },
+
     onEnter: function () {
     	this._super();
     	this.setParentMenuDisable(this.getParent());
@@ -233,7 +252,7 @@ var Dialog = cc.LayerColor.extend({
 
     onTouchBegan: function (touch, event) {
     	cc.log("touch");
-        if (this._type == DialogType.getItem || this._type == DialogType.getItem10) {
+        if (this._type == DialogType.getItem || this._type == DialogType.getItem10 || this._type == DialogType.temp) {
             this.removeFromParent();
         }
     	return true;
@@ -242,7 +261,7 @@ var Dialog = cc.LayerColor.extend({
     setParentMenuDisable: function (root) {
     	if (root == this) {
     		return;
-    	}else if (root instanceof cc.MenuItem) {
+    	}else if (root instanceof cc.Menu) {
     		root.setEnabled(false);
     	}else if(root instanceof cc.Node){
     		var children = root.getChildren();
@@ -262,7 +281,7 @@ var Dialog = cc.LayerColor.extend({
     setParentMenuEnabled: function (root) {
     	if (root == this) {
     		return;
-    	}else if (root instanceof cc.MenuItem) {
+    	}else if (root instanceof cc.Menu) {
     		root.setEnabled(true);
     	}else if(root instanceof cc.Node){
     		var children = root.getChildren();

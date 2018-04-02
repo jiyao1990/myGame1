@@ -42,10 +42,14 @@ var appFiles = [
     'src/scenes/MyHouseScene.js',
     'src/scenes/ParentsScene.js',
     'src/scenes/QianQiScene.js',
+    'src/scenes/QianQi2Scene.js',
+    'src/scenes/QianQi3Scene.js',
     'src/scenes/ShopScene.js',
     'src/scenes/SignInScene.js',
     'src/scenes/SiWeiScene.js',
     'src/scenes/TanJiuScene.js',
+    'src/scenes/TanJiu2Scene.js',
+    
 
     'src/dialog/Dialog.js'
 ];

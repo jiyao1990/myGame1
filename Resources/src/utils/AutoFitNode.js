@@ -1,6 +1,7 @@
 var scaleMode = {
 	FitOut:1,
-	FitIn:2
+	FitIn:2,
+	FitFull:3,
 }
 
 var fitScaleIn;
@@ -18,8 +19,11 @@ var AutoFitNode = cc.Node.extend({
 		fitScaleOut = hRatio < wRatio ? wRatio : hRatio;
 		if (mode == 1) {
 			this.setScale(fitScaleOut);
-		}else{
+		}else if(mode == 2){
 			this.setScale(fitScaleIn);
+		}else {
+			this.setScaleX(wRatio);
+			this.setScaleY(hRatio);
 		}
 	},
 });
